@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+  <script type="text/javascript" src="game.js"></script>
+</head>
+
+<body>
+
+<canvas id="myCanvas" width="600" height="600"></canvas>
+
+
+<script>
+
+ c=document.getElementById("myCanvas");
+ ctx=c.getContext("2d");   
+
+    
+var myGame = {
+
+	Canvas:c,
+	Context:ctx,
+
+	Init: function()
+	{
+        SpriteArray=[];
+        
+       a =  Game.Sprite({Speed:Game.Random(100,1),width:100,height:45,X:Game.Random(500,1),Y:Game.Random(500,1)});
+        
+         for ( i = 0; i < 10 ; i++) {
+            SpriteArray[i] =  Game.Sprite({Speed:Game.Random(100,1),width:100,height:45,X:Game.Random(500,1),Y:Game.Random(500,1)});  
+        };	
+       
+	},
+
+	Update: function()
+	{
+
+        if(Game.Controls.keyPressed[40])
+        {    
+            SpriteArray[6].Y = SpriteArray[6].Y + 10;
+        }
+        
+        if(Game.Controls.keyPressed[38])
+        {    
+            SpriteArray[6].Y =  SpriteArray[6].Y - 10;
+        }
+        
+        if(Game.Controls.keyPressed[39])
+        {    
+            SpriteArray[6].X = SpriteArray[6].X + 10;
+        }
+        
+        if(Game.Controls.keyPressed[37])
+        {    
+            SpriteArray[6].X =  SpriteArray[6].X - 10;
+        }
+        
+        
+        if(Game.CheckTwoGameObjectsCollision(SpriteArray[6],SpriteArray[7]))
+        {
+            SpriteArray[6].Color  ="#FF0000";
+        }
+        else{SpriteArray[6].Color  ="#FFA000";}
+        
+        
+        if(Game.CheckCollisionInCollaction(a,SpriteArray))
+          {
+            a.Color  ="#FF0000";
+        }
+        else{a.Color  ="#FFA000";}
+        
+        
+        
+       
+        
+        
+	},
+	
+	Draw: function()
+	{      
+        a.Draw();
+       
+		for ( i = 0; i < 10 ; i++) {
+            SpriteArray[i].Draw();  
+        };
+    		
+	}
+	
+};
+    
+
+      
+    
+
+Game.Run(myGame);
+
+
+</script>
+
+
+
+</body>
+</html>
