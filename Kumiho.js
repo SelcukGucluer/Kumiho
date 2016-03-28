@@ -7,16 +7,16 @@ var _requestAnimationFrame = function(win, t) {
 
 
 
-var Game = {
+var Kumiho = {
 
     
 	Run: function(GameObject)
 	{
 	    
-		Game.then = Date.now();
-		Game.GameObject = GameObject;
-		Game.GameObject.Init(); 
-		Game.Loop();
+		Kumiho.then = Date.now();
+		Kumiho.GameObject = GameObject;
+		Kumiho.GameObject.Init(); 
+		Kumiho.Loop();
 
 	},
 	
@@ -24,20 +24,20 @@ var Game = {
 	Loop: function()
 	{
 		
-		Game.setDelta();
-		Game.GameObject.Update();
-        Game.GameObject.Context.clearRect(0, 0, Game.GameObject.Canvas.width, Game.GameObject.Canvas.height);
-		Game.GameObject.Draw();
-		Game.animationFrame = window.requestAnimationFrame(Game.Loop);
+		Kumiho.setDelta();
+		Kumiho.GameObject.Update();
+        Kumiho.GameObject.Context.clearRect(0, 0, Kumiho.GameObject.Canvas.width, Kumiho.GameObject.Canvas.height);
+		Kumiho.GameObject.Draw();
+		Kumiho.animationFrame = window.requestAnimationFrame(Kumiho.Loop);
         
 	},
 	
 	Random: function(a,b) {return Math.floor(Math.random() * a) + b;},
 	
 	setDelta: function() {
-		Game.now = Date.now();
-		Game.delta = (Game.now - Game.then) / 1000; // seconds since last frame
-		Game.then = Game.now;
+		Kumiho.now = Date.now();
+		Kumiho.delta = (Kumiho.now - Kumiho.then) / 1000; // seconds since last frame
+		Kumiho.then = Kumiho.now;
 	},
 	
 	
@@ -56,8 +56,8 @@ var Game = {
 		}
 		
 		that.Draw = function(){
-            Game.GameObject.Context.fillStyle = that.Color;
-			Game.GameObject.Context.fillRect(that.X,that.Y,that.width,that.height);
+            Kumiho.GameObject.Context.fillStyle = that.Color;
+			Kumiho.GameObject.Context.fillRect(that.X,that.Y,that.width,that.height);
 		};
 
     return that;
@@ -65,12 +65,7 @@ var Game = {
     
     
     
-    Controls:{
-        keyPressed: {},
-        MouseClick: {},
-        
-    },
-    
+
     CheckCollision: function (x1, y1, w1, h1, x2, y2, w2, h2) {
         if (x1 + w1 > x2 && x2 + w2 > x1 && y1 + h1 > y2 && y2 + h2 > y1) { return true; }
             return false;
@@ -85,7 +80,7 @@ var Game = {
         
         for (var i = 0; i < SpriteCollaction.length ; i++) { 
             
-            if (Game.CheckCollision(x, y, w, h, SpriteCollaction[i].X, SpriteCollaction[i].Y, SpriteCollaction[i].width, SpriteCollaction[i].height) === true) {
+            if (Kumiho.CheckCollision(x, y, w, h, SpriteCollaction[i].X, SpriteCollaction[i].Y, SpriteCollaction[i].width, SpriteCollaction[i].height) === true) {
                  return true;
              }
            
@@ -101,25 +96,74 @@ var Game = {
         var w = Sprite.width;
         var h = Sprite.height;
                  
-            if (Game.CheckCollision(x, y, w, h, Sprite1.X, Sprite1.Y, Sprite1.width, Sprite1.height) === true) {
+            if (Kumiho.CheckCollision(x, y, w, h, Sprite1.X, Sprite1.Y, Sprite1.width, Sprite1.height) === true) {
                  return true;
              }            
    
         return false;
            
-    }
+    },
+    
+    Text:function(options) {				
+		var that = {};
+		
+		that.fontsize = options.fontsize | 12;
+		that.font = options.font | Georgia;
+		that.X = options.X;
+		that.Y = options.Y;
+		that.Color = "#E88813";
+        that.text = "";
+        
+		
+		that.Draw = function(){
+            Kumiho.GameObject.Context.fillStyle = that.Color;
+            Kumiho.GameObject.Context.font="12px Georgia";
+			Kumiho.GameObject.Context.fillText(that.text,that.X,that.Y);
+		};
+
+    return that;
+	},
+    
+
     
     
 };
 
-document.addEventListener("keydown", function(e){
 
-Game.Controls.keyPressed[e.keyCode]=true;
-   
-}); 
+//Kumiho Controls object
 
-document.addEventListener("keyup", function(e){
 
-Game.Controls.keyPressed[e.keyCode]=false;
-   
-}); 
+    Kumiho.Controls = { 
+        
+        keyPressed: [], 
+        MouseClick: false,
+        
+        keydown: function(e){
+          Kumiho.Controls.keyPressed[e.keyCode]=true;  
+        },
+        
+        keyup: function(e){
+          Kumiho.Controls.keyPressed[e.keyCode]=false;  
+        },
+        
+        Mousedown: function(e){
+          Kumiho.Controls.MouseClick = true;  
+        },
+        
+        Mouseup: function(e){
+          Kumiho.Controls.MouseClick = false;  
+        },
+        
+       
+    };
+
+
+//Kumiho Event Listeners
+
+document.addEventListener("keydown", Kumiho.Controls.keydown); 
+document.addEventListener("keyup", Kumiho.Controls.keyup);
+document.addEventListener("mousedown", Kumiho.Controls.Mousedown); 
+document.addEventListener("mouseup", Kumiho.Controls.Mouseup);
+
+
+
