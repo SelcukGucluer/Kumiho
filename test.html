@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Untitled Document</title>
-  <script type="text/javascript" src="game.js"></script>
+  <script type="text/javascript" src="Kumiho.js"></script>
 </head>
 
 <body>
 
-<canvas id="myCanvas" width="600" height="600"></canvas>
+<canvas id="myCanvas" width="600" height="600" style = "background-color: rgba(158, 167, 184, 0.2);" ></canvas>
 
 
 <script>
@@ -24,56 +24,53 @@ var myGame = {
 
 	Init: function()
 	{
-        SpriteArray=[];
+     
         
-       a =  Game.Sprite({Speed:Game.Random(100,1),width:100,height:45,X:Game.Random(500,1),Y:Game.Random(500,1)});
+       a =  Kumiho.Sprite({Speed:Kumiho.Random(100,1),width:100,height:45,X:Kumiho.Random(500,1),Y:Kumiho.Random(500,1)});
+        
+       mycollaction = Kumiho.SpriteCollection();
         
          for ( i = 0; i < 10 ; i++) {
-            SpriteArray[i] =  Game.Sprite({Speed:Game.Random(100,1),width:100,height:45,X:Game.Random(500,1),Y:Game.Random(500,1)});  
+           mycollaction.Add( Kumiho.Sprite({Speed:Kumiho.Random(100,1),width:100,height:45,X:Kumiho.Random(500,1),Y:Kumiho.Random(500,1)}));  
         };	
-       
+		
+		skor = Kumiho.Text({message:"selam millet",X:30,Y:30,font:"50px Arial"});
+    
+
 	},
 
 	Update: function()
 	{
 
-        if(Game.Controls.keyPressed[40])
+
+        if(Kumiho.Controls.keyPressed[40])
+        {   
+
+            mycollaction.sprites[6].Y = mycollaction.sprites[6].Y + 10;
+            
+        }
+        
+        if(Kumiho.Controls.keyPressed[38])
         {    
-            SpriteArray[6].Y = SpriteArray[6].Y + 10;
+
+            mycollaction.sprites[6].Y =  mycollaction.sprites[6].Y - 10;
         }
         
-        if(Game.Controls.keyPressed[38])
+        if(Kumiho.Controls.keyPressed[39])
+        {   
+
+           mycollaction.sprites[6].X = mycollaction.sprites[6].X + 10;
+        }
+        
+        if(Kumiho.Controls.keyPressed[37])
         {    
-            SpriteArray[6].Y =  SpriteArray[6].Y - 10;
+            mycollaction.sprites[6].X =  mycollaction.sprites[6].X - 10;
         }
         
-        if(Game.Controls.keyPressed[39])
-        {    
-            SpriteArray[6].X = SpriteArray[6].X + 10;
-        }
-        
-        if(Game.Controls.keyPressed[37])
-        {    
-            SpriteArray[6].X =  SpriteArray[6].X - 10;
-        }
-        
-        
-        if(Game.CheckTwoGameObjectsCollision(SpriteArray[6],SpriteArray[7]))
-        {
-            SpriteArray[6].Color  ="#FF0000";
-        }
-        else{SpriteArray[6].Color  ="#FFA000";}
-        
-        
-        if(Game.CheckCollisionInCollaction(a,SpriteArray))
-          {
-            a.Color  ="#FF0000";
-        }
-        else{a.Color  ="#FFA000";}
-        
-        
-        
-       
+        if(Kumiho.CheckCollisionInCollaction(mycollaction.sprites[6],mycollaction.sprites))
+            {
+                mycollaction.sprites[6].color = "#7099F0"
+            }
         
         
 	},
@@ -83,10 +80,15 @@ var myGame = {
         a.Draw();
        
 		for ( i = 0; i < 10 ; i++) {
-            SpriteArray[i].Draw();  
+            mycollaction.sprites[i].Draw();  
         };
-    		
+    
+        
+        skor.Draw();
+        
 	}
+    
+    
 	
 };
     
@@ -94,7 +96,7 @@ var myGame = {
       
     
 
-Game.Run(myGame);
+Kumiho.Run(myGame);
 
 
 </script>

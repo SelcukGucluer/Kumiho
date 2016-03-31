@@ -63,6 +63,43 @@ var Kumiho = {
     return that;
 	},
     
+    SpriteCollection: function() {				
+		var that = {};
+		
+		that.index = 0;
+		that.sprites = [];
+		
+		that.Add = function(sprite){
+           that.sprites[that.index] = sprite;
+          that.index ++;
+		};
+
+    return that;
+	},
+    
+    
+    	
+	Text: function(options) {				
+		var that = {};
+		
+   
+		that.font = options.font;
+		that.X = options.X;
+		that.Y = options.Y;
+        that.message = options.message;
+		that.Color = "#E88813";
+		
+		that.Draw = function(){
+                    
+            Kumiho.GameObject.Context.font=that.font;
+            Kumiho.GameObject.Context.fillStyle = that.Color;
+            Kumiho.GameObject.Context.fillText(that.message,that.X,that.Y);
+            
+		};
+
+    return that;
+	},
+    
     
     
 
@@ -80,12 +117,14 @@ var Kumiho = {
         
         for (var i = 0; i < SpriteCollaction.length ; i++) { 
             
+       if(SpriteCollaction.indexOf(Sprite) !== i){
             if (Kumiho.CheckCollision(x, y, w, h, SpriteCollaction[i].X, SpriteCollaction[i].Y, SpriteCollaction[i].width, SpriteCollaction[i].height) === true) {
                  return true;
              }
+        }
            
                    
-        };
+        }
         return false;
            
     },
@@ -104,26 +143,6 @@ var Kumiho = {
            
     },
     
-    Text:function(options) {				
-		var that = {};
-		
-		that.fontsize = options.fontsize | 12;
-		that.font = options.font | Georgia;
-		that.X = options.X;
-		that.Y = options.Y;
-		that.Color = "#E88813";
-        that.text = "";
-        
-		
-		that.Draw = function(){
-            Kumiho.GameObject.Context.fillStyle = that.Color;
-            Kumiho.GameObject.Context.font="12px Georgia";
-			Kumiho.GameObject.Context.fillText(that.text,that.X,that.Y);
-		};
-
-    return that;
-	},
-    
 
     
     
@@ -137,6 +156,8 @@ var Kumiho = {
         
         keyPressed: [], 
         MouseClick: false,
+		MouseX: 0,
+		MouseY: 0,
         
         keydown: function(e){
           Kumiho.Controls.keyPressed[e.keyCode]=true;  
@@ -153,9 +174,10 @@ var Kumiho = {
         Mouseup: function(e){
           Kumiho.Controls.MouseClick = false;  
         },
-        
-       
+		
     };
+
+    
 
 
 //Kumiho Event Listeners
