@@ -16,29 +16,18 @@ var myGame = {
 
 	Init: function()
 	{
-    a =  Kumiho.Sprite({Speed:Kumiho.Random(100,1),width:100,height:45,X:Kumiho.Random(500,1),Y:Kumiho.Random(500,1)});
-		
-    skor = Kumiho.Text({message:"selam millet",X:30,Y:30,font:"50px Arial"});
-    
-
+		//your code run once
 	},
 
 	Update: function()
 	{
-        
-      if(Kumiho.CheckCollisionInCollaction(mycollaction.sprites[6],mycollaction.sprites))
-          {
-              mycollaction.sprites[6].color = "#7099F0"
-          }
-        
+        	//your game logic, core macanics
         
 	},
 	
 	Draw: function()
 	{      
-        a.Draw();
-
-        skor.Draw();
+		// rendering the objects
         
 	}
 };
