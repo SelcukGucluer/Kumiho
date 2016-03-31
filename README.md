@@ -4,6 +4,8 @@ Javascript Canvas 2D game lib
 
 ## kullanımı 
 
+
+```javascript
 c=document.getElementById("myCanvas");
  ctx=c.getContext("2d");   
 
@@ -39,10 +41,7 @@ var myGame = {
         skor.Draw();
         
 	}
-    
-    
-	
 };
 
 Kumiho.Run(myGame);
-
+```
