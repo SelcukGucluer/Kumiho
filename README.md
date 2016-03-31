@@ -1,8 +1,8 @@
 # Kumiho
-Javascript Canvas 2D game lib
+Time base Javascript Canvas 2D game lib
 
 
-## kullanımı 
+## Kullanımı 
 
 
 ```javascript
