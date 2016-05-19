@@ -41,9 +41,8 @@ var Kumiho = {
 	},
 	
 	
-	Sprite: function(options) {				
+	Rectangle: function(options) {				
 		var that = {};
-		
 		that.width = options.width;
 		that.height = options.height;
 		that.Speed = options.Speed;
@@ -55,28 +54,129 @@ var Kumiho = {
 			return (that.Speed * del);
 		}
 		
+		
 		that.Draw = function(){
+			
             Kumiho.GameObject.Context.fillStyle = that.Color;
-			Kumiho.GameObject.Context.fillRect(that.X,that.Y,that.width,that.height);
+			Kumiho.GameObject.Context.fillRect(that.X,that.Y,that.width,that.height);		
+			
 		};
 
     return that;
 	},
+    
+   
+    AnimatedSprite: function(options) {				
+		var that = {};
+        
+        that.Speed = options.Speed;
+		that.X = options.X;
+		that.Y = options.Y;
+        
+        that.Animations = [];
+        that.CurrentAnimation = 0;
+		
+		that.AddAnimation = function(Animation){
+           that.Animations.push(Animation);
+		};
+        
+         that.size = function(){
+            return that.Animations.length;
+		};
+        
+		
+		that.update = function () {
+            
+           that.Animations[that.CurrentAnimation].update();
+        };
+		
+		
+		
+		that.Draw = function(){
+			that.Animations[that.CurrentAnimation].render(that.X ,that.Y);
+		};
+
+    return that;
+	},
+    
+    
+    Animate: function (options) {
+	
+		var that = {},
+			frameIndex = 0,
+			tickCount = 0,
+			ticksPerFrame = options.ticksPerFrame || 0,
+			numberOfFrames = options.numberOfFrames || 1;
+		
+		that.width = options.width;
+		that.height = options.height;
+		that.image = options.image;
+		
+		that.update = function () {
+
+            tickCount += 1;
+
+            if (tickCount > ticksPerFrame) {
+				tickCount = 0;
+                // If the current frame index is in range
+                if (frameIndex < numberOfFrames - 1) {	
+                    // Go to the next frame
+                    frameIndex += 1;
+                } else {
+                    frameIndex = 0;
+                }
+            }
+        };
+		
+		that.render = function (x,y) {
+		  // Draw the animation
+		  Kumiho.GameObject.Context.drawImage(
+		    that.image,
+		    frameIndex * that.width / numberOfFrames,
+		    0,
+		    that.width / numberOfFrames,
+		    that.height,
+		    x,
+		    y,
+		    that.width / numberOfFrames,
+		    that.height);
+		};
+		
+		return that;
+	},
+	
     
     SpriteCollection: function() {				
 		var that = {};
 		
-		that.index = 0;
 		that.sprites = [];
 		
 		that.Add = function(sprite){
-           that.sprites[that.index] = sprite;
-          that.index ++;
+           that.sprites.push(sprite);
+		};
+        
+         that.size = function(){
+            return that.sprites.length;
 		};
 
     return that;
 	},
     
+    AnimationCollection: function() {				
+		var that = {};
+		
+		that.Animations = [];
+		that.Add = function(Animation){
+           that.Animations.push(Animation);
+		};
+        that.size = function(){
+            return that.Animations.length;
+		};
+        
+        
+
+    return that;
+	},
     
     	
 	Text: function(options) {				
@@ -99,9 +199,7 @@ var Kumiho = {
 
     return that;
 	},
-    
-    
-    
+        
 
     CheckCollision: function (x1, y1, w1, h1, x2, y2, w2, h2) {
         if (x1 + w1 > x2 && x2 + w2 > x1 && y1 + h1 > y2 && y2 + h2 > y1) { return true; }
