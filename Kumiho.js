@@ -1,5 +1,3 @@
-
-
 var _requestAnimationFrame = function(win, t) {
   return win["webkitR" + t] || win["r" + t] || win["mozR" + t]
           || win["msR" + t] || function(fn) { setTimeout(fn, 60) }
@@ -102,24 +100,24 @@ var Kumiho = {
     
     Animate: function (options) {
 	
-		var that = {},
-			frameIndex = 0,
-			tickCount = 0,
-			ticksPerFrame = options.ticksPerFrame || 0,
-			numberOfFrames = options.numberOfFrames || 1;
-		
+		var that = {}, frameIndex = 0, tickCount = 0,ticksPerFrame=0;
+            
+
+        that.numberOfFrames = options.numberOfFrames || 1;	
 		that.width = options.width;
 		that.height = options.height;
 		that.image = options.image;
+        that.ticksPerSec = options.ticksPerSec;
 		
 		that.update = function () {
-
+            
+            ticksPerFrame = that.ticksPerSec * Kumiho.delta;
             tickCount += 1;
 
             if (tickCount > ticksPerFrame) {
 				tickCount = 0;
                 // If the current frame index is in range
-                if (frameIndex < numberOfFrames - 1) {	
+                if (frameIndex < that.numberOfFrames - 1) {	
                     // Go to the next frame
                     frameIndex += 1;
                 } else {
@@ -132,51 +130,19 @@ var Kumiho = {
 		  // Draw the animation
 		  Kumiho.GameObject.Context.drawImage(
 		    that.image,
-		    frameIndex * that.width / numberOfFrames,
+		    frameIndex * that.width / that.numberOfFrames,
 		    0,
-		    that.width / numberOfFrames,
+		    that.width / that.numberOfFrames,
 		    that.height,
 		    x,
 		    y,
-		    that.width / numberOfFrames,
+		    that.width / that.numberOfFrames,
 		    that.height);
 		};
 		
 		return that;
 	},
-	
-    
-    SpriteCollection: function() {				
-		var that = {};
-		
-		that.sprites = [];
-		
-		that.Add = function(sprite){
-           that.sprites.push(sprite);
-		};
-        
-         that.size = function(){
-            return that.sprites.length;
-		};
 
-    return that;
-	},
-    
-    AnimationCollection: function() {				
-		var that = {};
-		
-		that.Animations = [];
-		that.Add = function(Animation){
-           that.Animations.push(Animation);
-		};
-        that.size = function(){
-            return that.Animations.length;
-		};
-        
-        
-
-    return that;
-	},
     
     	
 	Text: function(options) {				
@@ -240,8 +206,6 @@ var Kumiho = {
         return false;
            
     },
-    
-
     
     
 };
