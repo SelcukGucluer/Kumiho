@@ -1,3 +1,5 @@
+
+
 var _requestAnimationFrame = function(win, t) {
   return win["webkitR" + t] || win["r" + t] || win["mozR" + t]
           || win["msR" + t] || function(fn) { setTimeout(fn, 60) }
@@ -111,7 +113,7 @@ var Kumiho = {
 		
 		that.update = function () {
             
-            ticksPerFrame = that.ticksPerSec * Kumiho.delta;
+            ticksPerFrame = 1 / Kumiho.delta / that.ticksPerSec;
             tickCount += 1;
 
             if (tickCount > ticksPerFrame) {
@@ -152,7 +154,7 @@ var Kumiho = {
 		that.font = options.font;
 		that.X = options.X;
 		that.Y = options.Y;
-        that.message = options.message;
+        that.message = options.message || "";
 		that.Color = "#E88813";
 		
 		that.Draw = function(){
@@ -248,6 +250,4 @@ document.addEventListener("keydown", Kumiho.Controls.keydown);
 document.addEventListener("keyup", Kumiho.Controls.keyup);
 document.addEventListener("mousedown", Kumiho.Controls.Mousedown); 
 document.addEventListener("mouseup", Kumiho.Controls.Mouseup);
-
-
 
