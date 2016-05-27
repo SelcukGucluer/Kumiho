@@ -8,7 +8,7 @@
 
 <body>
 
-<canvas id="myCanvas" width="600" height="600" style = "background-color: rgba(158, 167, 184, 0.2);" ></canvas>
+<canvas id="myCanvas" width="800" height="800" style = "background-color: rgba(158, 167, 184, 0.2);" ></canvas>
 
 
 <script>
@@ -27,19 +27,18 @@ var myGame = {
 		
 		skor = Kumiho.Text({message:"selam millet",X:10,Y:50,font:"40px Arial"});
         
-        a= Kumiho.Rectangle({X:200,Y:200,width:50,height:50})
+        	a= Kumiho.Rectangle({X:200,Y:200,width:50,height:50})
         
-        mycollection =  Kumiho.SpriteCollection();
-            
+         	sprites = [];
+     
+		coinImage = new Image();	
+		coinImage.src = "coin-sprite-animation.png";
         
-    coinImage = new Image();	
-	coinImage.src = "coin-sprite-animation.png";
         
-        
-         for(i = 0;i< 5;i++)
+         for(i = 0;i< 10;i++)
         {
-            mycollection.Add(Kumiho.AnimatedSprite({X:Kumiho.Random(500,1),Y:Kumiho.Random(500,1)}));
-            mycollection.sprites[i].AddAnimation(Kumiho.Animate({width: 1000,height: 100,image: coinImage,numberOfFrames: 10,ticksPerFrame: 4,}));
+            sprites.push(Kumiho.AnimatedSprite({X:Kumiho.Random(700,1),Y:Kumiho.Random(700,1)}));
+            sprites[i].AddAnimation(Kumiho.Animate({width: 1000,height: 100,image: coinImage,numberOfFrames: 10,ticksPerSec: 200,}));
         }
         
 	},
@@ -47,29 +46,26 @@ var myGame = {
 	Update: function()
 	{	
 			
-	   
+	
  	},
 	
 	Draw: function()
 	{      
-        skor.Draw();
-        a.Draw();
+        	skor.Draw();
+        	a.Draw();
        
        
-         for(i = 0;i< 5;i++)
-        {
-            mycollection.sprites[i].update();
-            mycollection.sprites[i].Draw();
-        }
+         	for(i = 0;i< 10;i++)
+        	{
+           		sprites[i].update();
+           		sprites[i].Draw();
+        	}
         
 	}
     
     
 	
 };
-    
-
-      
     
 
 Kumiho.Run(myGame);
