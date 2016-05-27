@@ -25,12 +25,13 @@ var myGame = {
 	Init: function()
 	{
 		
-		skor = Kumiho.Text({message:"selam millet",X:10,Y:50,font:"40px Arial"});
+		skor = Kumiho.Text({X:10,Y:50,font:"40px Arial"});
         
-        	a= Kumiho.Rectangle({X:200,Y:200,width:50,height:50})
+        a= Kumiho.Rectangle({X:200,Y:200,width:50,height:50})
         
-         	sprites = [];
-     
+         sprites = [];
+            
+        
 		coinImage = new Image();	
 		coinImage.src = "coin-sprite-animation.png";
         
@@ -38,7 +39,7 @@ var myGame = {
          for(i = 0;i< 10;i++)
         {
             sprites.push(Kumiho.AnimatedSprite({X:Kumiho.Random(700,1),Y:Kumiho.Random(700,1)}));
-            sprites[i].AddAnimation(Kumiho.Animate({width: 1000,height: 100,image: coinImage,numberOfFrames: 10,ticksPerSec: 200,}));
+            sprites[i].AddAnimation(Kumiho.Animate({width: 1000,height: 100,image: coinImage,numberOfFrames: 10,ticksPerSec: 10,}));
         }
         
 	},
@@ -46,26 +47,30 @@ var myGame = {
 	Update: function()
 	{	
 			
-	
+	   skor.message = Kumiho.FrameRate;
+        
  	},
 	
 	Draw: function()
 	{      
-        	skor.Draw();
-        	a.Draw();
+        skor.Draw();
+        a.Draw();
        
        
-         	for(i = 0;i< 10;i++)
-        	{
-           		sprites[i].update();
-           		sprites[i].Draw();
-        	}
+         for(i = 0;i< 10;i++)
+        {
+           sprites[i].update();
+           sprites[i].Draw();
+        }
         
 	}
     
     
 	
 };
+    
+
+      
     
 
 Kumiho.Run(myGame);
