@@ -25,29 +25,30 @@ var myGame = {
 	Init: function()
 	{
 		
-		skor = Kumiho.Text({X:10,Y:50,font:"40px Arial"});
+		skor = Kumiho.Text({X:10,Y:50,font:"40px Arial",message: "adasadassad"});
         
         a= Kumiho.Rectangle({X:200,Y:200,width:50,height:50})
         
          sprites = [];
             
         
-		coinImage = new Image();	
-		coinImage.src = "coin-sprite-animation.png";
+		runImage = new Image();	
+		runImage.src = "run.png";
         
         
-         for(i = 0;i< 10;i++)
+         for(i = 0;i< 100;i++)
         {
-            sprites.push(Kumiho.AnimatedSprite({X:Kumiho.Random(700,1),Y:Kumiho.Random(700,1)}));
-            sprites[i].AddAnimation(Kumiho.Animate({width: 1000,height: 100,image: coinImage,numberOfFrames: 10,ticksPerSec: 10,}));
+			var Asprite = Kumiho.AnimatedSprite({X:Kumiho.Random(700,1),Y:Kumiho.Random(700,1)});
+            sprites.push(Asprite);
+			var AnAnimation = Kumiho.Animate({width: 1440,height: 200,image: runImage,numberOfFrames: 8,ticksPerSec: 13,Loop:true});
+            sprites[i].AddAnimation(AnAnimation);
         }
         
 	},
 
 	Update: function()
 	{	
-			
-	   skor.message = Kumiho.FrameRate;
+	   
         
  	},
 	
@@ -57,7 +58,7 @@ var myGame = {
         a.Draw();
        
        
-         for(i = 0;i< 10;i++)
+         for(i = 0;i< 100;i++)
         {
            sprites[i].update();
            sprites[i].Draw();

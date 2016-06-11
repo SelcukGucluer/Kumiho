@@ -80,7 +80,7 @@ var Kumiho = {
            that.Animations.push(Animation);
 		};
         
-         that.size = function(){
+         that.length = function(){
             return that.Animations.length;
 		};
         
@@ -88,8 +88,8 @@ var Kumiho = {
 		that.update = function () {
             
            that.Animations[that.CurrentAnimation].update();
+		   
         };
-		
 		
 		
 		that.Draw = function(){
@@ -102,35 +102,25 @@ var Kumiho = {
     
     Animate: function (options) {
 	
-		var that = {}, frameIndex = 0, tickCount = 0,ticksPerFrame=0;
+        var that = {}, frameIndex = 0, currentposition = 0,LastFrame = false;
             
-
         that.numberOfFrames = options.numberOfFrames || 1;	
 		that.width = options.width;
 		that.height = options.height;
 		that.image = options.image;
+		that.Loop = options.Loop;
         that.ticksPerSec = options.ticksPerSec;
 		
 		that.update = function () {
-            
-            ticksPerFrame = 1 / Kumiho.delta / that.ticksPerSec;
-            tickCount += 1;
-
-            if (tickCount > ticksPerFrame) {
-				tickCount = 0;
-                // If the current frame index is in range
-                if (frameIndex < that.numberOfFrames - 1) {	
-                    // Go to the next frame
-                    frameIndex += 1;
-                } else {
-                    frameIndex = 0;
-                }
-            }
+            currentposition += Kumiho.delta;
+            if (currentposition  > (that.numberOfFrames / that.ticksPerSec) ) { currentposition =  currentposition - (that.numberOfFrames / that.ticksPerSec) }
         };
 		
 		that.render = function (x,y) {
-		  // Draw the animation
-		  Kumiho.GameObject.Context.drawImage(
+            
+            frameIndex = Math.floor(currentposition * that.ticksPerSec);
+
+		    Kumiho.GameObject.Context.drawImage(
 		    that.image,
 		    frameIndex * that.width / that.numberOfFrames,
 		    0,
@@ -187,9 +177,7 @@ var Kumiho = {
             if (Kumiho.CheckCollision(x, y, w, h, SpriteCollaction[i].X, SpriteCollaction[i].Y, SpriteCollaction[i].width, SpriteCollaction[i].height) === true) {
                  return true;
              }
-        }
-           
-                   
+        }          
         }
         return false;
            
@@ -250,4 +238,6 @@ document.addEventListener("keydown", Kumiho.Controls.keydown);
 document.addEventListener("keyup", Kumiho.Controls.keyup);
 document.addEventListener("mousedown", Kumiho.Controls.Mousedown); 
 document.addEventListener("mouseup", Kumiho.Controls.Mouseup);
+
+
 
