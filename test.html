@@ -8,7 +8,7 @@
 
 <body>
 
-<canvas id="myCanvas" width="800" height="800" style = "background-color: rgba(158, 167, 184, 0.2);" ></canvas>
+<canvas id="myCanvas" width="400" height="400" style = "background-color: rgba(158, 167, 184, 0.2);" ></canvas>
 
 
 <script>
@@ -33,15 +33,23 @@ var myGame = {
             
         
 		runImage = new Image();	
-		runImage.src = "run.png";
+		runImage.src = "sheet.png";
+
+	
         
-        
-         for(i = 0;i< 100;i++)
+         for(i = 0;i< 5;i++)
         {
-			var Asprite = Kumiho.AnimatedSprite({X:Kumiho.Random(700,1),Y:Kumiho.Random(700,1)});
+		var Asprite = Kumiho.AnimatedSprite({X:Kumiho.Random(300,1),Y:Kumiho.Random(300,1),Speed:70});
+            
             sprites.push(Asprite);
-			var AnAnimation = Kumiho.Animate({width: 1440,height: 200,image: runImage,numberOfFrames: 8,ticksPerSec: 13,Loop:true});
+            
+		var AnAnimation = Kumiho.Animate({width: 61,height: 61,image: runImage,numberOfFrames: 8,ticksPerSec: 9,Loop:true, Index: 0});
+           	var AnAnimation2 = Kumiho.Animate({width: 61,height: 61,image: runImage,numberOfFrames: 8,ticksPerSec: 9,Loop:true, Index: 1});
+		var AnAnimation3 = Kumiho.Animate({width: 61,height: 61,image: runImage,numberOfFrames: 9,ticksPerSec: 6,Loop:true, Index: 2});
+            
             sprites[i].AddAnimation(AnAnimation);
+            sprites[i].AddAnimation(AnAnimation2);
+	    sprites[i].AddAnimation(AnAnimation3);
         }
         
 	},
@@ -49,6 +57,9 @@ var myGame = {
 	Update: function()
 	{	
 	   
+         sprites[3].X = sprites[3].X + sprites[3].Speed * Kumiho.delta;
+	 sprites[4].CurrentAnimation=2;
+		
         
  	},
 	
@@ -58,14 +69,13 @@ var myGame = {
         a.Draw();
        
        
-         for(i = 0;i< 100;i++)
+         for(i = 0;i< 5;i++)
         {
            sprites[i].update();
            sprites[i].Draw();
         }
         
 	}
-    
     
 	
 };

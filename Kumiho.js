@@ -109,6 +109,7 @@ var Kumiho = {
 		that.height = options.height;
 		that.image = options.image;
 		that.Loop = options.Loop;
+		that.Index = options.Index;
         that.ticksPerSec = options.ticksPerSec;
 		
 		that.update = function () {
@@ -122,13 +123,13 @@ var Kumiho = {
 
 		    Kumiho.GameObject.Context.drawImage(
 		    that.image,
-		    frameIndex * that.width / that.numberOfFrames,
-		    0,
-		    that.width / that.numberOfFrames,
+		    frameIndex * that.width,
+		    that.Index * that.height,
+		    that.width,
 		    that.height,
 		    x,
 		    y,
-		    that.width / that.numberOfFrames,
+		    that.width,
 		    that.height);
 		};
 		
