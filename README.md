@@ -34,3 +34,7 @@ var myGame = {
 
 Kumiho.Run(myGame);
 ```
+
+## AnimadedSprites
+
+
