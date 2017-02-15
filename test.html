@@ -8,7 +8,7 @@
 
 <body>
 
-<canvas id="myCanvas" width="400" height="400" style = "background-color: rgba(158, 167, 184, 0.2);" ></canvas>
+<canvas id="myCanvas" width="600" height="600" ></canvas>
 
 
 <script>
@@ -25,63 +25,45 @@ var myGame = {
 	Init: function()
 	{
 		
-		skor = Kumiho.Text({X:10,Y:50,font:"40px Arial",message: "adasadassad"});
-        
-        a= Kumiho.Rectangle({X:200,Y:200,width:50,height:50})
-        
-         sprites = [];
-            
-        
+        aCollection = Kumiho.SpriteCollaction();
+			
+		for (i = 0; i < 30; i++) { 
+			aCollection.Add(Kumiho.Rectangle({X:Kumiho.Random(570,1),Y:Kumiho.Random(570,1),width:25,height:25}));
+		}
+	
+		
 		runImage = new Image();	
 		runImage.src = "sheet.png";
 
-	
-        
-         for(i = 0;i< 5;i++)
-        {
-		var Asprite = Kumiho.AnimatedSprite({X:Kumiho.Random(300,1),Y:Kumiho.Random(300,1),Speed:70});
-            
-            sprites.push(Asprite);
-            
-		var AnAnimation = Kumiho.Animate({width: 61,height: 61,image: runImage,numberOfFrames: 8,ticksPerSec: 9,Loop:true, Index: 0});
-           	var AnAnimation2 = Kumiho.Animate({width: 61,height: 61,image: runImage,numberOfFrames: 8,ticksPerSec: 9,Loop:true, Index: 1});
-		var AnAnimation3 = Kumiho.Animate({width: 61,height: 61,image: runImage,numberOfFrames: 9,ticksPerSec: 6,Loop:true, Index: 2});
-            
-            sprites[i].AddAnimation(AnAnimation);
-            sprites[i].AddAnimation(AnAnimation2);
-	    sprites[i].AddAnimation(AnAnimation3);
-        }
-        
+		BgImage = new Image();	
+		BgImage.src = "Back_ggi_hellsforest.png";
+
 	},
 
 	Update: function()
 	{	
-	   
-         sprites[3].X = sprites[3].X + sprites[3].Speed * Kumiho.delta;
-	 sprites[4].CurrentAnimation=2;
-		
+
+		aCollection.EachWhitIndex(function(Sprite,i){
+
+			var list = aCollection.Collision.InCollaction(Sprite);
+				
+			for (var z = 0; z < list.length ; z++) { 
+				list[z].Color = "red";
+			}
+
+		});	
         
  	},
 	
 	Draw: function()
 	{      
-        skor.Draw();
-        a.Draw();
-       
-       
-         for(i = 0;i< 5;i++)
-        {
-           sprites[i].update();
-           sprites[i].Draw();
-        }
         
+		aCollection.Draw();
+ 
 	}
     
 	
 };
-    
-
-      
     
 
 Kumiho.Run(myGame);
