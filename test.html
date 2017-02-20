@@ -8,7 +8,7 @@
 
 <body>
 
-<canvas id="myCanvas" width="600" height="600" ></canvas>
+<canvas id="myCanvas" width="500" height="500" ></canvas>
 
 
 <script>
@@ -27,37 +27,82 @@ var myGame = {
 		
         aCollection = Kumiho.SpriteCollaction();
 			
-		for (i = 0; i < 30; i++) { 
-			aCollection.Add(Kumiho.Rectangle({X:Kumiho.Random(570,1),Y:Kumiho.Random(570,1),width:25,height:25}));
+		for (i = 0; i < 70; i++) { 
+			aCollection.Add(Kumiho.Rectangle({X:Kumiho.Random(1520,1),Y:Kumiho.Random(813,1),Speed:200,width:25,height:25}));
 		}
-	
 		
 		runImage = new Image();	
 		runImage.src = "sheet.png";
 
 		BgImage = new Image();	
 		BgImage.src = "Back_ggi_hellsforest.png";
+		
+		FrameRate = Kumiho.Text({X:50, Y:50});
+		currentpos = 0;
 
 	},
 
 	Update: function()
-	{	
+	{
+		
 
+		currentpos += Kumiho.delta
+		if(currentpos > 1)
+		{
+			currentpos = 0;
+			FrameRate.message = Math.floor(Kumiho.delta * 60 * 60)
+		}
+		
+		
+	
 		aCollection.EachWhitIndex(function(Sprite,i){
-
-			var list = aCollection.Collision.InCollaction(Sprite);
+			
+			Sprite.Color = "yellow";
+			
+			var list = aCollection.Collision(Sprite);
 				
 			for (var z = 0; z < list.length ; z++) { 
 				list[z].Color = "red";
 			}
+			
+			
+			if(Kumiho.Controls.keyPressed[38]==true && i ==5 )
+			{
+				Sprite.y = Sprite.y - Sprite.Distance();
+			}
+		
+			if(Kumiho.Controls.keyPressed[39]==true && i ==5 )
+			{
+				Sprite.x = Sprite.x + Sprite.Distance();
+			}
+		
+			if(Kumiho.Controls.keyPressed[40]==true && i ==5 )
+			{
+				Sprite.y = Sprite.y + Sprite.Distance();
+			}
+		
+			if(Kumiho.Controls.keyPressed[37]==true && i ==5 )
+			{
+				Sprite.x = Sprite.x - Sprite.Distance();
+			}			
+			
+			if(i == 5 )
+			{
+				Kumiho.Camera.Fallow(Sprite);
+			}
+			
 
 		});	
+		
+		
         
  	},
 	
 	Draw: function()
-	{      
-        
+	{    
+	
+		Kumiho.Scene.Draw(BgImage);
+		FrameRate.Draw();
 		aCollection.Draw();
  
 	}
