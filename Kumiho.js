@@ -52,16 +52,13 @@ var Kumiho = {
 		that.x = options.X;
 		that.y = options.Y;
 		that.Color = "#E88813";
-        
-		that.calcDistance = function(del) {
-			return (that.Speed * del);
-		}
+		that.Distance = function(){ return that.Speed * Kumiho.delta }
 		
 		
 		that.Draw = function(){
 			
             Kumiho.GameObject.Context.fillStyle = that.Color;
-			Kumiho.GameObject.Context.fillRect(that.x,that.y,that.w,that.h);		
+			Kumiho.GameObject.Context.fillRect(that.x - Kumiho.Camera.X,that.y - Kumiho.Camera.Y,that.w,that.h);		
 			
 		};
 
@@ -194,7 +191,7 @@ var Kumiho = {
             }
 		};
 		
-		that.Collision.InCollaction = function(sprite){
+		that.Collision = function(sprite){
 			
 			var CollisionElements = [];
 			
@@ -285,12 +282,10 @@ var Kumiho = {
         
         keydown: function(e){
           Kumiho.Controls.keyPressed[e.keyCode]=true;
-		  alert("down");
         },
         
         keyup: function(e){
           Kumiho.Controls.keyPressed[e.keyCode]=false;
-			alert("up");
         },
         
         Mousedown: function(e){
@@ -303,6 +298,71 @@ var Kumiho = {
 		
 		
     };
+	
+	
+    Kumiho.Camera = { 
+
+		X : 0,
+        Y : 0,
+        TargetX : 0,
+        TargetY : 0,
+        Speed : 10,
+        MinX : 0,
+        MinY : 0,
+        MaxX : 1520,	
+        MaxY : 813,
+        
+        Fallow: function(sprite){
+			
+			var currentX = (((sprite.x - (Kumiho.Camera.X + (Kumiho.GameObject.Canvas.width / 2))) * Kumiho.Camera.Speed) / 100) + Kumiho.Camera.X
+			var currentY = (((sprite.y - (Kumiho.Camera.Y + (Kumiho.GameObject.Canvas.height / 2))) * Kumiho.Camera.Speed) / 100) + Kumiho.Camera.Y;
+
+			if(currentX >= Kumiho.Camera.MinX && currentX <= Kumiho.Camera.MaxX -Kumiho.GameObject.Canvas.width )
+			{
+				Kumiho.Camera.X = currentX;
+			}
+
+			if(currentY >= Kumiho.Camera.MinY && currentY <= Kumiho.Camera.MaxY - Kumiho.GameObject.Canvas.width )
+			{
+				Kumiho.Camera.Y = currentY;
+			}		
+			
+			
+        }
+       
+	
+		
+    };
+	
+	Kumiho.Scene = { 
+
+
+        
+        Draw: function(image){
+          
+		 Kumiho.GameObject.Context.drawImage(
+		    image,
+		    Kumiho.Camera.X,
+		    Kumiho.Camera.Y,
+		    Kumiho.GameObject.Canvas.width,
+		    Kumiho.GameObject.Canvas.height,
+		    0,
+		    0,
+		    Kumiho.GameObject.Canvas.width,
+		    Kumiho.GameObject.Canvas.height);
+		  
+        }
+       
+	
+		
+    };	
+	
+	
+	
+	
+	
+	
+	
 
 	
 
@@ -543,5 +603,4 @@ QUAD.init = function (args) {
         }
     };
 };
-
 
