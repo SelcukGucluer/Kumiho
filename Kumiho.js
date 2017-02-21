@@ -6,9 +6,6 @@ var _requestAnimationFrame = function(win, t) {
 
 
 
-
-
-
 var Kumiho = {
 
     
