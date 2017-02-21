@@ -56,10 +56,11 @@ var Kumiho = {
 		
 		
 		that.Draw = function(){
-			
-            Kumiho.GameObject.Context.fillStyle = that.Color;
-			Kumiho.GameObject.Context.fillRect(that.x - Kumiho.Camera.X,that.y - Kumiho.Camera.Y,that.w,that.h);		
-			
+			if(Kumiho.CheckCollision(that.x,that.y,that.w,that.h,Kumiho.Camera.X,Kumiho.Camera.Y,Kumiho.Camera.maxX,Kumiho.Camera.maxY) == false)
+            {
+				Kumiho.GameObject.Context.fillStyle = that.Color;
+				Kumiho.GameObject.Context.fillRect(that.x - Kumiho.Camera.X,that.y - Kumiho.Camera.Y,that.w,that.h);		
+			}
 		};
 
     return that;
@@ -603,4 +604,5 @@ QUAD.init = function (args) {
         }
     };
 };
+
 
