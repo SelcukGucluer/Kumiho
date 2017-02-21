@@ -11,9 +11,11 @@ var Kumiho = {
     
 	Run: function(GameObject)
 	{
-	    
+		
 		Kumiho.then = Date.now();
 		Kumiho.GameObject = GameObject;
+		Kumiho.Scene.MaxW = Kumiho.GameObject.Canvas.width;
+		Kumiho.Scene.MaxH = Kumiho.GameObject.Canvas.height;
 		Kumiho.GameObject.Init(); 
 		Kumiho.Loop();
 
@@ -167,8 +169,8 @@ var Kumiho = {
 			// mandatory fields
 			x : 0,
 			y : 0,
-			w : 600,
-			h : 600,
+			w : Kumiho.GameObject.Canvas.width,
+			h : Kumiho.GameObject.Canvas.height,
 
 			// optional fields
 			maxChildren : 8,
@@ -307,20 +309,18 @@ var Kumiho = {
         Speed : 10,
         MinX : 0,
         MinY : 0,
-        MaxX : 1520,	
-        MaxY : 813,
         
         Fallow: function(sprite){
 			
 			var currentX = (((sprite.x - (Kumiho.Camera.X + (Kumiho.GameObject.Canvas.width / 2))) * Kumiho.Camera.Speed) / 100) + Kumiho.Camera.X
 			var currentY = (((sprite.y - (Kumiho.Camera.Y + (Kumiho.GameObject.Canvas.height / 2))) * Kumiho.Camera.Speed) / 100) + Kumiho.Camera.Y;
 
-			if(currentX >= Kumiho.Camera.MinX && currentX <= Kumiho.Camera.MaxX -Kumiho.GameObject.Canvas.width )
+			if(currentX >= Kumiho.Camera.MinX && currentX <= Kumiho.Scene.MaxW -Kumiho.GameObject.Canvas.width )
 			{
 				Kumiho.Camera.X = currentX;
 			}
 
-			if(currentY >= Kumiho.Camera.MinY && currentY <= Kumiho.Camera.MaxY - Kumiho.GameObject.Canvas.width )
+			if(currentY >= Kumiho.Camera.MinY && currentY <= Kumiho.Scene.MaxH- Kumiho.GameObject.Canvas.height )
 			{
 				Kumiho.Camera.Y = currentY;
 			}		
@@ -332,13 +332,36 @@ var Kumiho = {
 		
     };
 	
-	Kumiho.Scene = { 
+	
+	
+	
+	Kumiho.Scene = {
+		
+		Scenes:[],
 
+		Add: function(image)
+		{
+			if(Kumiho.Scene.MaxW < image.width)
+			{
+				Kumiho.Scene.MaxW = image.width;
+				
+			}
+			
+			if(Kumiho.Scene.MaxH < image.height)
+			{
+				Kumiho.Scene.MaxH = image.height;
+			}
+			
+			Scenes.push(image);
+			
+			alert(Kumiho.Scene.MaxW);
+			
+		},
 
         
         Draw: function(image){
           
-		 Kumiho.GameObject.Context.drawImage(
+		Kumiho.GameObject.Context.drawImage(
 		    image,
 		    Kumiho.Camera.X,
 		    Kumiho.Camera.Y,

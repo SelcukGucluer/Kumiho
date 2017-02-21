@@ -39,6 +39,13 @@ var myGame = {
 		
 		FrameRate = Kumiho.Text({X:50, Y:50});
 		currentpos = 0;
+		
+		
+		BgImage.onload = function ()
+		{
+			Kumiho.Scene.Add(BgImage);
+		}
+		
 
 	},
 
