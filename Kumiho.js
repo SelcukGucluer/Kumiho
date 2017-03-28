@@ -14,8 +14,8 @@ var Kumiho = {
 		
 		Kumiho.then = Date.now();
 		Kumiho.GameObject = GameObject;
-		Kumiho.Scene.MaxW = Kumiho.GameObject.Canvas.width;
-		Kumiho.Scene.MaxH = Kumiho.GameObject.Canvas.height;
+		Kumiho.Camera.MaxW = Kumiho.GameObject.Canvas.width;
+		Kumiho.Camera.MaxH = Kumiho.GameObject.Canvas.height;
 		Kumiho.GameObject.Init(); 
 		Kumiho.Loop();
 
@@ -53,17 +53,68 @@ var Kumiho = {
 		that.Color = "#E88813";
 		that.Distance = function(){ return that.Speed * Kumiho.delta }
 		
-		
 		that.Draw = function(){
-			if(Kumiho.CheckCollision(that.x,that.y,that.w,that.h,Kumiho.Camera.X,Kumiho.Camera.Y,Kumiho.Camera.maxX,Kumiho.Camera.maxY) == false)
-            {
+
 				Kumiho.GameObject.Context.fillStyle = that.Color;
 				Kumiho.GameObject.Context.fillRect(that.x - Kumiho.Camera.X,that.y - Kumiho.Camera.Y,that.w,that.h);		
-			}
+
 		};
 
     return that;
 	},
+	
+	Sprite: function(options) {	
+
+    	CalCoordinate = function(value){
+
+            var xy={};
+
+			for (var r = 0; r < that.rows ;r++) {
+			
+			    if( that.cols * r >= value && (that.cols -(that.cols * r - value)) > -1)
+                {
+                    xy.y = r -1 ;
+                    xy.x = that.cols -(that.cols * r - value) -1;
+			
+	    		}
+            }
+
+               return xy;
+		};
+
+		var that = {};
+		that.w = options.width;
+		that.h = options.height;
+		that.Speed = options.Speed;
+		that.x = options.X;
+		that.y = options.Y;
+        that.image = options.image;
+		that.Distance = function(){ return that.Speed * Kumiho.delta }
+		that.cols = options.cols;
+        that.rows = options.rows;
+        that.tileIndex = options.tileIndex;
+    
+		
+		that.Draw = function () {
+            var Cor = CalCoordinate(that.tileIndex)
+
+
+				Kumiho.GameObject.Context.drawImage(
+				that.image,
+				Cor.x * that.w,
+				Cor.y * that.h,
+				that.w -2,
+				that.h -2,
+				that.x - Math.round(Kumiho.Camera.X),
+				that.y - Math.round(Kumiho.Camera.Y),
+				that.w,
+				that.h );
+			
+		};
+
+    return that;
+	},	
+	
     
    
     AnimatedSprite: function(options) {				
@@ -191,22 +242,20 @@ var Kumiho = {
             }
 		};
 		
-		that.Collision = function(sprite){
+		that.Collision = function(sprite,f){
 			
-			var CollisionElements = [];
-			
+
 			that.tree.retrieve(sprite, function(item) {
 			
 				if( item != sprite) {
 					if (Kumiho.CheckCollision(sprite.x, sprite.y, sprite.w, sprite.h, item.x, item.y, item.w, item.h) === true) 
 					{
-							CollisionElements.push(item);
+							f(item);
 					}
 				}
 			});
 			
-			return CollisionElements;
-			
+
 		};
 		
 		
@@ -312,15 +361,16 @@ var Kumiho = {
         
         Fallow: function(sprite){
 			
-			var currentX = (((sprite.x - (Kumiho.Camera.X + (Kumiho.GameObject.Canvas.width / 2))) * Kumiho.Camera.Speed) / 100) + Kumiho.Camera.X
-			var currentY = (((sprite.y - (Kumiho.Camera.Y + (Kumiho.GameObject.Canvas.height / 2))) * Kumiho.Camera.Speed) / 100) + Kumiho.Camera.Y;
+			var currentX = (sprite.x - (Kumiho.Camera.X + (Kumiho.GameObject.Canvas.width / 2))) + Kumiho.Camera.X;
+			var currentY = (sprite.y - (Kumiho.Camera.Y + (Kumiho.GameObject.Canvas.height / 2))) + Kumiho.Camera.Y;
+			
 
-			if(currentX >= Kumiho.Camera.MinX && currentX <= Kumiho.Scene.MaxW -Kumiho.GameObject.Canvas.width )
+			if(currentX >= Kumiho.Camera.MinX && currentX <= Kumiho.Camera.MaxW - Kumiho.GameObject.Canvas.width)
 			{
 				Kumiho.Camera.X = currentX;
 			}
 
-			if(currentY >= Kumiho.Camera.MinY && currentY <= Kumiho.Scene.MaxH- Kumiho.GameObject.Canvas.height )
+			if(currentY >= Kumiho.Camera.MinY && currentY <= Kumiho.Camera.MaxH - Kumiho.GameObject.Canvas.height)
 			{
 				Kumiho.Camera.Y = currentY;
 			}		
@@ -335,36 +385,20 @@ var Kumiho = {
 	
 	
 	
-	Kumiho.Scene = {
+	Kumiho.Scene = function(image){
 		
-		Scenes:[],
-
-		Add: function(image)
-		{
-			if(Kumiho.Scene.MaxW < image.width)
-			{
-				Kumiho.Scene.MaxW = image.width;
-				
-			}
-			
-			if(Kumiho.Scene.MaxH < image.height)
-			{
-				Kumiho.Scene.MaxH = image.height;
-			}
-			
-			Scenes.push(image);
-			
-			alert(Kumiho.Scene.MaxW);
-			
-		},
+		var that = {};
+		
+		that.Speed = 25;
+		that.image = image;
 
         
-        Draw: function(image){
+        that.Draw = function(){
           
-		Kumiho.GameObject.Context.drawImage(
-		    image,
-		    Kumiho.Camera.X,
-		    Kumiho.Camera.Y,
+			Kumiho.GameObject.Context.drawImage(
+		    that.image,
+		    (Kumiho.Camera.X * that.Speed) / 100,
+		    (Kumiho.Camera.Y * that.Speed) / 100,
 		    Kumiho.GameObject.Canvas.width,
 		    Kumiho.GameObject.Canvas.height,
 		    0,
@@ -372,7 +406,9 @@ var Kumiho = {
 		    Kumiho.GameObject.Canvas.width,
 		    Kumiho.GameObject.Canvas.height);
 		  
-        }
+        };
+       
+		return that;
        
 	
 		
@@ -380,11 +416,77 @@ var Kumiho = {
 	
 	
 	
-	
-	
-	
-	
+	Kumiho.TileMap = {
+		
+		Init: function(options) {
+			
+			Kumiho.TileMap.cols = options.cols;
+			Kumiho.TileMap.rows = options.rows;
+			Kumiho.TileMap.tsize = options.tsize;
+			Kumiho.TileMap.tiles = options.tiles;
+            Kumiho.TileMap.image = options.image;
+			Kumiho.TileMap.Collction = Kumiho.SpriteCollaction();
+			Kumiho.TileMap.sheetcols = options.sheetcols;
+			Kumiho.TileMap.sheetrows = options.sheetrows;
+			
+			
+			Kumiho.Camera.MaxW = Kumiho.TileMap.cols * Kumiho.TileMap.tsize;
+			Kumiho.Camera.MaxH = Kumiho.TileMap.rows * Kumiho.TileMap.tsize;
+			
+			for (var c = 0; c < Kumiho.TileMap.cols; c++) {
+				for (var r = 0; r < Kumiho.TileMap.rows; r++) {
+					var tile = Kumiho.TileMap.GetTile(c, r);
+					if (tile !== 0) { 
+						
+					Kumiho.TileMap.Collction.Add(
+					
+					
+					Kumiho.Sprite({
+						
+					X:c*Kumiho.TileMap.tsize,
+					Y:r*Kumiho.TileMap.tsize,
+					Speed:200,
+					width:Kumiho.TileMap.tsize,
+					height:Kumiho.TileMap.tsize,
+					image:Kumiho.TileMap.image ,
+					cols:Kumiho.TileMap.sheetcols,
+					rows:Kumiho.TileMap.sheetrows,
+					tileIndex:tile})
 
+					);
+						
+					}
+				}
+			}
+			
+			
+		},
+       
+		GetTile: function(col, row) {
+			return Kumiho.TileMap.tiles[row * Kumiho.TileMap.cols + col];
+		},
+		
+		SetTile: function(col, row, value) {
+			Kumiho.TileMap.tiles[row * Kumiho.TileMap.cols + col] = value;
+		},
+		
+		Remove:function(col, row){
+			
+			Kumiho.TileMap.tiles.SetTile(col, row, 0);
+			//Kumiho.TileMap.Collction.Remove();
+			
+		},
+		
+		Draw: function(){
+			
+		
+		Kumiho.TileMap.Collction.Draw();
+			
+			
+		}
+
+    };
+	
 	
 
 
