@@ -35,18 +35,3 @@ var myGame = {
 Kumiho.Run(myGame);
 ```
 
-## Animasyon Oluşturma
-
-```javascript
-
-var AnAnimation = Kumiho.Animate({
-	width: 61,
-	height: 61,
-	image: runImage,
-	numberOfFrames: 8,
-	ticksPerSec: 9,
-	Loop:true, 
-	Index: 0
-});
-
-```
