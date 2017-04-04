@@ -501,10 +501,8 @@ var Kumiho = {
 
 /*
  * Javascript Quadtree 
- * @version 1.1.1
- * @licence MIT
- * @author Timo Hausmann
- * https://github.com/timohausmann/quadtree-js/
+ * @author silflow
+ * https://github.com/silflow
  */
 
 var QUAD = {}; // global var for the quadtree
