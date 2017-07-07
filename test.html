@@ -8,7 +8,7 @@
 
 <body>
 
-<canvas id="myCanvas" width="500" height="500" ></canvas>
+<canvas id="myCanvas" width="800" height="800" ></canvas>
 
 
 <script>
@@ -25,93 +25,116 @@ var myGame = {
 	Init: function()
 	{
 		
-        aCollection = Kumiho.SpriteCollaction();
-			
-		for (i = 0; i < 70; i++) { 
-			aCollection.Add(Kumiho.Rectangle({X:Kumiho.Random(1520,1),Y:Kumiho.Random(813,1),Speed:200,width:25,height:25}));
-		}
-		
-		runImage = new Image();	
-		runImage.src = "sheet.png";
+		var tilemap = new Image();
+		  tilemap.src = "assets/tileset.png"
 
-		BgImage = new Image();	
-		BgImage.src = "Back_ggi_hellsforest.png";
+		var bp = new Image();
+		  bp.src = "assets/bg.png"
 		
-		FrameRate = Kumiho.Text({X:50, Y:50});
-		currentpos = 0;
+		var map = {
+			cols: 21,
+			rows: 10,
+			tsize: 131,
+			tiles: [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,11,12,13,0,0,0,0,0,0,0,0,0,0,0,0,
+					 0,0,0,0,0,0,0,0,0,0,14,16,17,0,0,0,0,0,0,0,0,
+					16,16,16,16,16,16,16,16,16,16,15,19,6,16,16,16,0,0,0,0,0,
+					20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,0,0,0,0,0					
+					],
+			image:tilemap,
+			sheetcols:5,
+			sheetrows:4
+		};
 		
+		Kumiho.TileMap.Init(map);
 		
-		BgImage.onload = function ()
-		{
-			Kumiho.Scene.Add(BgImage);
-		}
+		myScene = Kumiho.Scene(bp);
+		myScene.Speed = 40;
 		
-
+		myRectangle = Kumiho.Rectangle({X:100, Y:100, width:25, height:25, Speed:150 })
+		mytext = Kumiho.Text({X:50, Y:50 })
+		
+		counter =0;
+		frame =0;
 	},
 
 	Update: function()
 	{
+	
+	
+		counter =  counter + 1;
+		frame = frame + Kumiho.delta;
 		
-
-		currentpos += Kumiho.delta
-		if(currentpos > 1)
+		if (counter >= 60)
 		{
-			currentpos = 0;
-			FrameRate.message = Math.floor(Kumiho.delta * 60 * 60)
+		counter = 0;
+		mytext.message = Math.round(frame * 60);
+		frame =0;
 		}
 		
+		myRectangle.Color= "blue";
+			
+		Kumiho.Camera.Fallow(myRectangle);
 		
 	
-		aCollection.EachWhitIndex(function(Sprite,i){
-			
-			Sprite.Color = "yellow";
-			
-			var list = aCollection.Collision(Sprite);
-				
-			for (var z = 0; z < list.length ; z++) { 
-				list[z].Color = "red";
-			}
-			
-			
-			if(Kumiho.Controls.keyPressed[38]==true && i ==5 )
-			{
-				Sprite.y = Sprite.y - Sprite.Distance();
-			}
+		if(Kumiho.Controls.keyPressed[37]==true  )
+		{
+			myRectangle.x = myRectangle.x - myRectangle.Distance();
+		}
 		
-			if(Kumiho.Controls.keyPressed[39]==true && i ==5 )
-			{
-				Sprite.x = Sprite.x + Sprite.Distance();
-			}
-		
-			if(Kumiho.Controls.keyPressed[40]==true && i ==5 )
-			{
-				Sprite.y = Sprite.y + Sprite.Distance();
-			}
-		
-			if(Kumiho.Controls.keyPressed[37]==true && i ==5 )
-			{
-				Sprite.x = Sprite.x - Sprite.Distance();
-			}			
+		if(Kumiho.Controls.keyPressed[38]==true )
+		{
+			myRectangle.y = myRectangle.y - myRectangle.Distance();
+		}
 			
-			if(i == 5 )
-			{
-				Kumiho.Camera.Fallow(Sprite);
-			}
+		if(Kumiho.Controls.keyPressed[39]==true  )
+		{
+			myRectangle.x = myRectangle.x + myRectangle.Distance();
+		}
 			
+		if(Kumiho.Controls.keyPressed[40]==true  )
+		{
+			myRectangle.y = myRectangle.y + myRectangle.Distance();
+		}
 
-		});	
+
+		Kumiho.TileMap.Collction.Collision(myRectangle,function(Sprite){
 		
+			if(Sprite.tileIndex == 4 )
+			{
+				myRectangle.Color= "red";
+			}
+			
+			if(Sprite.tileIndex == 25 )
+			{
+				myRectangle.Color= "green";
+				
+			}
+			if(Sprite.tileIndex == 38 )
+			{
+				myRectangle.Color= "yellow";
+			}
+			
 		
-        
+		});
+
+		
+			
  	},
 	
 	Draw: function()
-	{    
+	{
 	
-		Kumiho.Scene.Draw(BgImage);
-		FrameRate.Draw();
-		aCollection.Draw();
- 
+		myScene.Draw();
+		Kumiho.TileMap.Draw();
+		myRectangle.Draw();
+		mytext.Draw();
+	
 	}
     
 	
