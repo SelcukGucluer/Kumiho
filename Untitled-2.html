@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Untitled Document</title>
+	</head>
+
+	<body>
+
+		<canvas id="myCanvas" width="500" height="500" > </canvas>
+
+		<script>
+		
+
+
+
+
+
+
+
+var k = new Kumiho("myCanvas");
+
+var mygame = {
+
+	init: function($Scope){
+
+		$Scope.mytext = k.Text({X:100, Y:100, width:25, height:25, message:"asdasdasdasasd" })
+		$Scope.Sprites = new SpriteCollaction()
+		
+		$Scope.my = k.Regtengel({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), width:25, height:25, Speed:Kumiho.random(40,100)})
+		
+		for (var i = 0; i < 50; i++) {
+		
+			$Scope.Sprites.add( k.Regtengel({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), width:25, height:25, Speed:Kumiho.random(40,100) }))
+        }
+		
+
+		
+	},
+
+	update: function($Scope){
+	
+		$Scope.mytext.message = countFPS();
+	
+		
+		$Scope.Sprites.each( function(sprite){
+			
+			if(sprite.x <= 200){
+			sprite.x = sprite.x + k.delta * sprite.speed
+			}
+		    if(sprite.x >= 200){
+			sprite.x = sprite.x - k.delta * sprite.speed
+			}
+			
+		})
+		
+		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed
+		
+		
+		k.Camera.fallow($Scope.my);
+		
+
+	},
+
+	draw: function($Scope){
+
+		$Scope.Sprites.draw();
+		$Scope.mytext.draw();
+		$Scope.my.draw();
+	}
+
+}
+
+k.run(mygame);
+
+
+</script>
+
+</body>
+</html>
+				
