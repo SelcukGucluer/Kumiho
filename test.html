@@ -1,152 +1,82 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Untitled Document</title>
-  <script type="text/javascript" src="Kumiho.js"></script>
-</head>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Untitled Document</title>
+		<script src="Kumiho.js"></script>
+	</head>
 
-<body>
+	<body>
 
-<canvas id="myCanvas" width="800" height="800" ></canvas>
+		<canvas id="myCanvas" width="500" height="500" > </canvas>
 
-
-<script>
-
- c=document.getElementById("myCanvas");
- ctx=c.getContext("2d");   
-
-    
-var myGame = {
-
-	Canvas:c,
-	Context:ctx,
-
-	Init: function()
-	{
+		<script>
 		
-		var tilemap = new Image();
-		  tilemap.src = "assets/tileset.png"
 
-		var bp = new Image();
-		  bp.src = "assets/bg.png"
+
+
+
+
+
+
+var k = new Kumiho("myCanvas");
+
+var mygame = {
+
+	init: function($Scope){
+
+		$Scope.mytext = k.Text({X:100, Y:100, width:25, height:25, message:"asdasdasdasasd" })
+		$Scope.Sprites = new SpriteCollaction()
 		
-		var map = {
-			cols: 21,
-			rows: 10,
-			tsize: 131,
-			tiles: [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,11,12,13,0,0,0,0,0,0,0,0,0,0,0,0,
-					 0,0,0,0,0,0,0,0,0,0,14,16,17,0,0,0,0,0,0,0,0,
-					16,16,16,16,16,16,16,16,16,16,15,19,6,16,16,16,0,0,0,0,0,
-					20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,0,0,0,0,0					
-					],
-			image:tilemap,
-			sheetcols:5,
-			sheetrows:4
-		};
+		$Scope.my = k.Regtengel({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), width:25, height:25, Speed:Kumiho.random(40,100)})
 		
-		Kumiho.TileMap.Init(map);
+		for (var i = 0; i < 50; i++) {
 		
-		myScene = Kumiho.Scene(bp);
-		myScene.Speed = 40;
+			$Scope.Sprites.add( k.Regtengel({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), width:25, height:25, Speed:Kumiho.random(40,100) }))
+        }
 		
-		myRectangle = Kumiho.Rectangle({X:100, Y:100, width:25, height:25, Speed:150 })
-		mytext = Kumiho.Text({X:50, Y:50 })
+
 		
-		counter =0;
-		frame =0;
 	},
 
-	Update: function()
-	{
+	update: function($Scope){
 	
+		$Scope.mytext.message = countFPS();
 	
-		counter =  counter + 1;
-		frame = frame + Kumiho.delta;
 		
-		if (counter >= 60)
-		{
-		counter = 0;
-		mytext.message = Math.round(frame * 60);
-		frame =0;
-		}
-		
-		myRectangle.Color= "blue";
+		$Scope.Sprites.each( function(sprite){
 			
-		Kumiho.Camera.Fallow(myRectangle);
-		
-	
-		if(Kumiho.Controls.keyPressed[37]==true  )
-		{
-			myRectangle.x = myRectangle.x - myRectangle.Distance();
-		}
-		
-		if(Kumiho.Controls.keyPressed[38]==true )
-		{
-			myRectangle.y = myRectangle.y - myRectangle.Distance();
-		}
-			
-		if(Kumiho.Controls.keyPressed[39]==true  )
-		{
-			myRectangle.x = myRectangle.x + myRectangle.Distance();
-		}
-			
-		if(Kumiho.Controls.keyPressed[40]==true  )
-		{
-			myRectangle.y = myRectangle.y + myRectangle.Distance();
-		}
-
-
-		Kumiho.TileMap.Collction.Collision(myRectangle,function(Sprite){
-		
-			if(Sprite.tileIndex == 4 )
-			{
-				myRectangle.Color= "red";
+			if(sprite.x <= 200){
+			sprite.x = sprite.x + k.delta * sprite.speed
+			}
+		    if(sprite.x >= 200){
+			sprite.x = sprite.x - k.delta * sprite.speed
 			}
 			
-			if(Sprite.tileIndex == 25 )
-			{
-				myRectangle.Color= "green";
-				
-			}
-			if(Sprite.tileIndex == 38 )
-			{
-				myRectangle.Color= "yellow";
-			}
-			
+		})
 		
-		});
+		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed
+		
+		
+		k.Camera.fallow($Scope.my);
+		
 
-		
-			
- 	},
-	
-	Draw: function()
-	{
-	
-		myScene.Draw();
-		Kumiho.TileMap.Draw();
-		myRectangle.Draw();
-		mytext.Draw();
-	
+	},
+
+	draw: function($Scope){
+
+		$Scope.Sprites.draw();
+		$Scope.mytext.draw();
+		$Scope.my.draw();
 	}
-    
-	
-};
-    
 
-Kumiho.Run(myGame);
+}
+
+k.run(mygame);
 
 
 </script>
 
-
-
 </body>
 </html>
+				
