@@ -35,17 +35,12 @@ class Kumiho{
 
 	}
 	
-	Text(options) {
+	Text (options) {return new Text(this.Context,this.Camera,options);}
 	
-		return new Text(this.Context,this.Camera,options);
+	Regtengel (options) {return new Regtengel(this.Context,this.Camera,options);}
 	
-	}
+	Scene (options) {return new Scene(this.Context,this.Camera,options);}
 	
-	Regtengel(options) {
-	
-		return new Regtengel(this.Context,this.Camera,options);
-	
-	}
 
 	run(game) {
 		this.then = Date.now();
@@ -55,7 +50,6 @@ class Kumiho{
 	}
 
 	loop(){
-	
 		this.setDelta();
 		this.game.update(this.$global);
 		this.Context.clearRect(0, 0, this.Canvas.width, this.Canvas.height);
@@ -158,6 +152,32 @@ class Text extends GameObject {
     };
 
 }
+
+class Scene extends GameObject {
+	
+	constructor(Context,Camera,options) {
+		super(Context,Camera, options);
+		this.Speed = options.Speed || 25;
+		this.Image = options.Image;
+	
+	}	
+
+    draw () {
+	
+        this.Context.drawImage(
+        this.Image,
+       (this.Camera.X * this.Speed) / 100,
+       (this.Camera.Y * this.Speed) / 100,
+        this.Canvas.width,
+        this.Canvas.height,
+        0,
+        0,
+        this.Canvas.width,
+        this.Canvas.height);
+
+    }
+
+};
 
 
 class SpriteCollaction {
