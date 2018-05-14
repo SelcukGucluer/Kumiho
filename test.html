@@ -19,6 +19,9 @@ var mygame = {
 
 	init: function($Scope){
 
+		k.Camera.MaxW =1000;
+		k.Camera.MaxH =1000;
+		
 		$Scope.mytext = k.Text({X:100, Y:100, width:25, height:25, message:"asdasdasdasasd" })
 		$Scope.Sprites = new SpriteCollaction()
 		
@@ -28,7 +31,12 @@ var mygame = {
 		
 			$Scope.Sprites.add( k.Regtengel({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), width:25, height:25, Speed:Kumiho.random(40,100) }))
         }
-	
+		
+		var bp = new Image();
+		  bp.src = "assets/bg.png"
+		
+		$Scope.myScene = k.Scene(bp);
+		$Scope.myScene.speed = 65;
 		
 	},
 
@@ -57,10 +65,11 @@ var mygame = {
 	},
 
 	draw: function($Scope){
-
+		$Scope.myScene.draw();
 		$Scope.Sprites.draw();
 		$Scope.mytext.draw();
 		$Scope.my.draw();
+
 	}
 
 }

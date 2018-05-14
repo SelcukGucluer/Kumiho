@@ -39,7 +39,7 @@ class Kumiho{
 	
 	Regtengel (options) {return new Regtengel(this.Context,this.Camera,options);}
 	
-	Scene (options) {return new Scene(this.Context,this.Camera,options);}
+	Scene (Image) {return new Scene(this.Canvas,this.Context,this.Camera,Image);}
 	
 
 	run(game) {
@@ -153,12 +153,90 @@ class Text extends GameObject {
 
 }
 
-class Scene extends GameObject {
-	
+
+ class Sprite extends GameObject {
+	 
 	constructor(Context,Camera,options) {
 		super(Context,Camera, options);
-		this.Speed = options.Speed || 25;
-		this.Image = options.Image;
+        this.image = options.image;
+        this.cols = options.cols;
+        this.rows = options.rows;
+        this.tileIndex = options.tileIndex;
+	}
+
+        CalCoordinate (value) {
+
+            var xy = {};
+			
+			if(value == that.rows * that.cols)
+			{
+				xy.y = that.rows -1
+				xy.x = that.cols -1					
+			}			
+		
+			if(value > that.cols)
+			{
+		
+				if(value % that.cols > 0)
+				{
+					xy.y = Math.floor(value / that.cols);
+					xy.x = value % that.cols -1;					
+				}
+				else
+				{
+					xy.y = Math.floor(value / that.cols)-1;
+					xy.x = that.cols-1;					
+				}
+				
+			}
+			else
+			{
+				xy.y = 0
+				xy.x = value -1;
+			}
+
+
+            return xy;
+        }
+		
+
+
+
+
+        Draw () {
+
+			if(Kumiho.CheckCollision(that.x,that.y,that.w,that.h,Kumiho.Camera.X,Kumiho.Camera.Y,Kumiho.GameObject.Canvas.width,Kumiho.GameObject.Canvas.height)){
+				var Cor = CalCoordinate(that.tileIndex)
+				Kumiho.GameObject.Context.drawImage(
+					that.image,
+					Cor.x * that.w,
+					Cor.y * that.h,
+					that.w -5 ,
+					that.h -5,
+					that.x - Math.round(Kumiho.Camera.X),
+					that.y - Math.round(Kumiho.Camera.Y),
+					that.w,
+					that.h);
+			}
+        };
+
+    }
+
+
+
+
+
+class Scene  {
+	
+	constructor(Canvas,Context,Camera,Image) {
+		this.Canvas	= Canvas;
+		this.Context = Context
+		this.Camera = Camera
+		this.Image =  Image;
+		this.w = this.Image.width;
+        this.h = this.Image.height;
+		this.speed =  50;
+
 	
 	}	
 
@@ -166,8 +244,8 @@ class Scene extends GameObject {
 	
         this.Context.drawImage(
         this.Image,
-       (this.Camera.X * this.Speed) / 100,
-       (this.Camera.Y * this.Speed) / 100,
+       (this.Camera.X * this.speed) / 100,
+       (this.Camera.Y * this.speed) / 100,
         this.Canvas.width,
         this.Canvas.height,
         0,
