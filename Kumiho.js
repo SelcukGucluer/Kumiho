@@ -16,21 +16,46 @@ window.countFPS = (function () {
   };
 }());
 
-
 class Kumiho{
 	constructor(CanvasID) {
 		this.Canvas = document.getElementById(CanvasID);
 		this.$global = {};
+		this.MouseClick = false;
+		this.keyPressed = [];
+		
+		this.Controls = {
+
+			MouseX: 0,
+			MouseY: 0,
+
+			keydown: function(e) {
+				this.keyPressed[e.keyCode] = true;
+			},
+
+			keyup: function(e) {
+				this.keyPressed[e.keyCode] = false;
+			},
+
+			Mousedown: function(e) {
+				this.MouseClick = true;
+				alert("sadasdasdasd");
+			},
+
+			Mouseup: function(e) {
+				this.MouseClick = false;
+			},
+
+		};
+		
+
 		this.Context = this.Canvas.getContext("2d");
 		this.Camera = new Camera(this.Canvas.width,this.Canvas.height);	
 		this.counter = 0;
-		this.Canvas.addEventListener('mousedown', function(event) {
-			alert("mouse")
-		}, false);
+		this.Canvas.addEventListener('mousedown', this.Controls.Mousedown);
+		this.Canvas.addEventListener('mouseup', this.Controls.Mouseup);
 		
-		document.addEventListener('keydown', function(event) {
-			alert("Keys")
-		}, false);	
+		document.addEventListener("keydown", this.Controls.keydown);
+		document.addEventListener("keyup", this.Controls.keyup);
 
 
 	}
@@ -62,6 +87,7 @@ class Kumiho{
         this.delta = (this.now - this.then) / 1000; // seconds since last frame
         this.then = this.now;
     }
+	
 
 	
 	static random(a, b) { 
@@ -153,8 +179,7 @@ class Text extends GameObject {
 
 }
 
-
- class Sprite extends GameObject {
+class Sprite extends GameObject {
 	 
 	constructor(Context,Camera,options) {
 		super(Context,Camera, options);
@@ -222,10 +247,6 @@ class Text extends GameObject {
 
     }
 
-
-
-
-
 class Scene  {
 	
 	constructor(Canvas,Context,Camera,Image) {
@@ -256,7 +277,6 @@ class Scene  {
     }
 
 };
-
 
 class SpriteCollaction {
 
