@@ -56,8 +56,13 @@ var mygame = {
 			
 		})
 		
-		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed
+		if(k.MouseClick == true)
+		{
+			alert("sdadadasd")
+		}
 		
+		
+		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed
 		
 		k.Camera.fallow($Scope.my);
 		

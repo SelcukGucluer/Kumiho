@@ -21,12 +21,13 @@ class Kumiho{
 		this.Canvas = document.getElementById(CanvasID);
 		this.$global = {};
 		this.MouseClick = false;
-		this.keyPressed = [];
+		this.keyPressed = new Array();
+		this.MouseX= 0;
+		this.MouseY= 0;
 		
 		this.Controls = {
 
-			MouseX: 0,
-			MouseY: 0,
+
 
 			keydown: function(e) {
 				this.keyPressed[e.keyCode] = true;
@@ -38,11 +39,14 @@ class Kumiho{
 
 			Mousedown: function(e) {
 				this.MouseClick = true;
-				alert("sadasdasdasd");
+				this.MouseX = e.clientX;
+				this.MouseY = e.clientY;
 			},
 
 			Mouseup: function(e) {
 				this.MouseClick = false;
+				this.MouseX = 0;
+				this.MouseY = 0;
 			},
 
 		};
