@@ -400,15 +400,6 @@ Kumiho.Camera = {
 
 Kumiho.Scene = function(image) {
 	
-	var myCanvas = new layeredCanvas( Kumiho.GameObject.Canvas );
-	
-	myCanvas.addLayer( {
-	id: 'background',
-	render: function( canvas, ctx ) {
-		ctx.fillStyle = "black";
-		ctx.fillRect( 0, 0, canvas.width, canvas.height );
-	}
-})
 
     var that = {};
 
