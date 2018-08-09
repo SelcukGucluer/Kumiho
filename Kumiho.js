@@ -517,14 +517,6 @@ document.addEventListener("keyup", Kumiho.Controls.keyup);
 
 
 
-/*
- * Javascript Quadtree 
- * @version 1.1.1
- * @licence MIT
- * @author Timo Hausmann
- * https://github.com/timohausmann/quadtree-js/
- */
-
 var QUAD = {}; // global var for the quadtree
 
 QUAD.init = function(args) {
