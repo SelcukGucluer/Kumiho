@@ -82,6 +82,8 @@ class Kumiho{
 	
 	Scene (Image) {return new Scene(this.Canvas,this.Context,this.Camera,Image);}
 	
+	Tileset (options) {return new Tileset(this.Canvas,this.Context,this.Camera,options);}
+	
 
 	run(game) {
 		this.then = Date.now();
@@ -352,5 +354,72 @@ class SpriteCollaction {
         if (x1 + w1 > x2 && x2 + w2 > x1 && y1 + h1 > y2 && y2 + h2 > y1) { return true; }
         return false;
     }
+
+}
+
+class Tileset {
+
+	constructor(Canvas,Context,Camera,options) {
+		this.image = options.image;
+        this.cols = options.cols;
+        this.rows = options.rows;
+		this.tileSize = options.tileSize;
+		this.Context = Context;
+		this.Camera = Camera;
+		this.x = 100;
+		this.y = 100;
+	}
+
+    getCoordinate (value) {
+
+		var xy = {};
+			
+		if(value == this.rows * this.cols)
+		{
+				xy.y = this.rows -1
+				xy.x = this.cols -1					
+		}			
+		
+		if(value > this.cols)
+		{
+		
+			if(value % this.cols > 0)
+			{
+				xy.y = Math.floor(value / this.cols);
+				xy.x = value % this.cols -1;					
+			}
+			else
+			{
+				xy.y = Math.floor(value / this.cols)-1;
+				xy.x = this.cols-1;					
+			}
+				
+		}
+		else
+		{
+			xy.y = 0
+			xy.x = value -1;
+		}
+
+
+        return xy;
+    }
+
+    draw (tileIndex) {
+
+		var Cor = this.getCoordinate(tileIndex)
+		this.Context.drawImage(
+		this.image,
+		Cor.x * this.tileSize,
+		Cor.y * this.tileSize,
+		this.tileSize -5 ,
+		this.tileSize -5,
+		this.x - Math.round(this.Camera.X),
+		this.y - Math.round(this.Camera.Y),
+		this.tileSize,
+		this.tileSize);
+
+    }
+	
 
 }

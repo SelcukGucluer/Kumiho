@@ -38,6 +38,8 @@ var mygame = {
 		$Scope.myScene = k.Scene(bp);
 		$Scope.myScene.speed = 65;
 		
+		$Scope.ts =  k.Tileset({cols:5,rows:4,tileSize:200,image:bp});
+		
 	},
 
 	update: function($Scope){
@@ -64,17 +66,18 @@ var mygame = {
 		
 		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed
 		
-		k.Camera.fallow($Scope.my);
+		//k.Camera.fallow($Scope.my);
 		
 
 	},
 
 	draw: function($Scope){
-		$Scope.myScene.draw();
-		$Scope.Sprites.draw();
+		//$Scope.myScene.draw();
+		
+		//$Scope.Sprites.draw();
 		$Scope.mytext.draw();
-		$Scope.my.draw();
-
+		//$Scope.my.draw();
+		$Scope.ts.draw(15)
 	}
 
 }
