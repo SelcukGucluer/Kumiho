@@ -16,49 +16,37 @@ window.countFPS = (function () {
   };
 }());
 
-
- thisAddEventListener = function(element, eventName, eventHandler, scope)
-    {
-        var scopedEventHandler = scope ? function(e) { eventHandler.apply(scope, [e]); } : eventHandler;
-        if(document.addEventListener)
-            element.addEventListener(eventName, scopedEventHandler, false);
-        else if(document.attachEvent)
-            element.attachEvent("on"+eventName, scopedEventHandler);
-    }
-
-
 class Kumiho{
 	constructor(CanvasID) {
 		this.Canvas = document.getElementById(CanvasID);
 		this.$global = {};
+		this.MouseClick = false;
+		this.keyPressed = new Array();
+		this.MouseX= 0;
+		this.MouseY= 0;
 		
-		this.input = {
+		this.Controls = {
 
-			keyPressed : [],
-			
-			MouseX : 0,
-			MouseY : 0,
-			
-			MouseClick : false,
-			
+
+
 			keydown: function(e) {
-				this.input.keyPressed[e.keyCode] = true;
+				this.keyPressed[e.keyCode] = true;
 			},
 
 			keyup: function(e) {
-				this.input.keyPressed[e.keyCode] = false;
+				this.keyPressed[e.keyCode] = false;
 			},
 
-			mousedown: function(e) {
-				this.input.MouseClick = true;
-				this.input.MouseX = e.clientX;
-				this.input.MouseY = e.clientY;
+			Mousedown: function(e) {
+				this.MouseClick = true;
+				this.MouseX = e.clientX;
+				this.MouseY = e.clientY;
 			},
 
-			mouseup: function(e) {
-				this.input.MouseClick = false;
-				this.input.MouseX = 0;
-				this.input.MouseY = 0;
+			Mouseup: function(e) {
+				this.MouseClick = false;
+				this.MouseX = 0;
+				this.MouseY = 0;
 			},
 
 		};
@@ -67,11 +55,11 @@ class Kumiho{
 		this.Context = this.Canvas.getContext("2d");
 		this.Camera = new Camera(this.Canvas.width,this.Canvas.height);	
 		this.counter = 0;
+		this.Canvas.addEventListener('mousedown', this.Controls.Mousedown);
+		this.Canvas.addEventListener('mouseup', this.Controls.Mouseup);
 		
-		thisAddEventListener(document, "keydown", this.input.keydown, this);
-		thisAddEventListener(document, "keyup", this.input.keyup, this);
-		thisAddEventListener(this.Canvas, "mousedown", this.input.mousedown, this);
-		thisAddEventListener(this.Canvas, "mouseup", this.input.mouseup, this);
+		document.addEventListener("keydown", this.Controls.keydown);
+		document.addEventListener("keyup", this.Controls.keyup);
 
 
 	}
@@ -95,7 +83,7 @@ class Kumiho{
 		this.game.update(this.$global);
 		this.Context.clearRect(0, 0, this.Canvas.width, this.Canvas.height);
 		this.game.draw(this.$global);
-		window.requestAnimationFrame(this.loop.bind(this));
+		window.webkitRequestAnimationFrame(this.loop.bind(this));
 	}
 
 	setDelta() {
