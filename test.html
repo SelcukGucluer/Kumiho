@@ -22,10 +22,15 @@ var mygame = {
 		k.Camera.MaxW =1000;
 		k.Camera.MaxH =1000;
 		
+		var ts = new Image();
+		ts.src = "assets/tileset.png"
+		
 		$Scope.mytext = k.Text({X:100, Y:100, width:25, height:25, message:"asdasdasdasasd" })
+		$Scope.ts =  k.Tileset({cols:5,rows:4,tileSize:130,image:ts});
+		
 		$Scope.Sprites = new SpriteCollaction()
 		
-		$Scope.my = k.Regtengel({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), width:25, height:25, Speed:Kumiho.random(40,100)})
+		$Scope.my = k.Sprite({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), Speed:Kumiho.random(40,100),tileset:$Scope.ts,tileIndex:5})
 		
 		for (var i = 0; i < 50; i++) {
 		
@@ -34,11 +39,13 @@ var mygame = {
 		
 		var bp = new Image();
 		  bp.src = "assets/bg.png"
+		  
+
 		
 		$Scope.myScene = k.Scene(bp);
 		$Scope.myScene.speed = 65;
 		
-		$Scope.ts =  k.Tileset({cols:5,rows:4,tileSize:200,image:bp});
+	
 		
 	},
 
@@ -56,28 +63,21 @@ var mygame = {
 			sprite.x = sprite.x - k.delta * sprite.speed
 			}
 			
-		})
-		
-		if(k.MouseClick == true)
-		{
-			alert("sdadadasd")
-		}
-		
+		});
+	
 		
 		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed
 		
-		//k.Camera.fallow($Scope.my);
+		k.Camera.fallow($Scope.my);
 		
 
 	},
 
 	draw: function($Scope){
-		//$Scope.myScene.draw();
-		
-		//$Scope.Sprites.draw();
+		$Scope.myScene.draw();
+		$Scope.Sprites.draw();
 		$Scope.mytext.draw();
-		//$Scope.my.draw();
-		$Scope.ts.draw(15)
+		$Scope.my.draw();
 	}
 
 }

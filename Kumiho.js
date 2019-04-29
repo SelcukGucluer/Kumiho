@@ -84,6 +84,8 @@ class Kumiho{
 	
 	Tileset (options) {return new Tileset(this.Canvas,this.Context,this.Camera,options);}
 	
+	Sprite (options) {return new Sprite(this.Canvas,this.Context,this.Camera,options);}
+	
 
 	run(game) {
 		this.then = Date.now();
@@ -119,7 +121,7 @@ class Kumiho{
 class Camera {
 
 	constructor(width,height) {
-		this.X =  0;
+		this.X = 0;
 		this.Y = 0;
 		this.width = width;
 		this.height = height;
@@ -199,71 +201,21 @@ class Text extends GameObject {
 
 class Sprite extends GameObject {
 	 
-	constructor(Context,Camera,options) {
+	constructor(Canvas,Context,Camera,options) {
 		super(Context,Camera, options);
-        this.image = options.image;
-        this.cols = options.cols;
-        this.rows = options.rows;
-        this.tileIndex = options.tileIndex;
+        this.tileset = options.tileset;
+		this.tileIndex = options.tileIndex;
+		this.tileset.x = this.x
+		this.tileset.y = this.y
 	}
-
-        CalCoordinate (value) {
-
-            var xy = {};
-			
-			if(value == that.rows * that.cols)
-			{
-				xy.y = that.rows -1
-				xy.x = that.cols -1					
-			}			
-		
-			if(value > that.cols)
-			{
-		
-				if(value % that.cols > 0)
-				{
-					xy.y = Math.floor(value / that.cols);
-					xy.x = value % that.cols -1;					
-				}
-				else
-				{
-					xy.y = Math.floor(value / that.cols)-1;
-					xy.x = that.cols-1;					
-				}
-				
-			}
-			else
-			{
-				xy.y = 0
-				xy.x = value -1;
-			}
-
-
-            return xy;
-        }
 		
 
-
-
-
-        Draw () {
-
-			if(Kumiho.CheckCollision(that.x,that.y,that.w,that.h,Kumiho.Camera.X,Kumiho.Camera.Y,Kumiho.GameObject.Canvas.width,Kumiho.GameObject.Canvas.height)){
-				var Cor = CalCoordinate(that.tileIndex)
-				Kumiho.GameObject.Context.drawImage(
-					that.image,
-					Cor.x * that.w,
-					Cor.y * that.h,
-					that.w -5 ,
-					that.h -5,
-					that.x - Math.round(Kumiho.Camera.X),
-					that.y - Math.round(Kumiho.Camera.Y),
-					that.w,
-					that.h);
-			}
-        };
-
+    draw () {
+		this.tileset.x = this.x - this.Camera.X;
+		this.tileset.y = this.y - this.Camera.Y;
+		this.tileset.draw(this.tileIndex)
     }
+}
 
 class Scene  {
 	
@@ -366,8 +318,8 @@ class Tileset {
 		this.tileSize = options.tileSize;
 		this.Context = Context;
 		this.Camera = Camera;
-		this.x = 100;
-		this.y = 100;
+		this.x = 0;
+		this.y = 0;
 	}
 
     getCoordinate (value) {
@@ -412,10 +364,10 @@ class Tileset {
 		this.image,
 		Cor.x * this.tileSize,
 		Cor.y * this.tileSize,
-		this.tileSize -5 ,
-		this.tileSize -5,
-		this.x - Math.round(this.Camera.X),
-		this.y - Math.round(this.Camera.Y),
+		this.tileSize,
+		this.tileSize,
+		this.x,
+		this.y,
 		this.tileSize,
 		this.tileSize);
 
