@@ -17,8 +17,8 @@ window.countFPS = (function () {
 }());
 
 
- thisAddEventListener = function(element, eventName, eventHandler, scope)
-    {
+ thisAddEventListener = function(element, eventName, eventHandler, scope){
+	 
         var scopedEventHandler = scope ? function(e) { eventHandler.apply(scope, [e]); } : eventHandler;
         if(document.addEventListener)
             element.addEventListener(eventName, scopedEventHandler, false);
@@ -375,3 +375,73 @@ class Tileset {
 	
 
 }
+
+Kumiho.TileMap = {
+
+    Init: function(options) {
+
+        Kumiho.TileMap.cols = options.cols;
+        Kumiho.TileMap.rows = options.rows;
+        Kumiho.TileMap.tiles = options.tiles;
+        Kumiho.TileMap.Collction = Kumiho.SpriteCollaction();
+        Kumiho.TileMap.sheetcols = options.sheetcols;
+        Kumiho.TileMap.sheetrows = options.sheetrows;
+
+
+        Kumiho.Camera.MaxW = Kumiho.TileMap.cols * Kumiho.TileMap.tsize;
+        Kumiho.Camera.MaxH = Kumiho.TileMap.rows * Kumiho.TileMap.tsize;
+
+        for (var c = 0; c < Kumiho.TileMap.cols; c++) {
+            for (var r = 0; r < Kumiho.TileMap.rows; r++) {
+                var tile = Kumiho.TileMap.GetTile(c, r);
+                if (tile !== 0) {
+
+                    Kumiho.TileMap.Collction.Add(
+
+
+                        Kumiho.Sprite({
+
+                            X: c * Kumiho.TileMap.tsize,
+                            Y: r * Kumiho.TileMap.tsize,
+                            Speed: 200,
+                            width: Kumiho.TileMap.tsize,
+                            height: Kumiho.TileMap.tsize,
+                            image: Kumiho.TileMap.image,
+                            cols: Kumiho.TileMap.sheetcols,
+                            rows: Kumiho.TileMap.sheetrows,
+                            tileIndex: tile
+                        })
+
+                    );
+
+                }
+            }
+        }
+
+
+    },
+
+    GetTile: function(col, row) {
+        return Kumiho.TileMap.tiles[row * Kumiho.TileMap.cols + col];
+    },
+
+    SetTile: function(col, row, value) {
+        Kumiho.TileMap.tiles[row * Kumiho.TileMap.cols + col] = value;
+    },
+
+    Remove: function(col, row) {
+
+        Kumiho.TileMap.tiles.SetTile(col, row, 0);
+        //Kumiho.TileMap.Collction.Remove();
+
+    },
+
+    Draw: function() {
+
+
+        Kumiho.TileMap.Collction.Draw();
+
+
+    }
+
+};
