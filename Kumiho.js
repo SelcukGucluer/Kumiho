@@ -86,6 +86,8 @@ class Kumiho{
 	
 	Sprite (options) {return new Sprite(this.Canvas,this.Context,this.Camera,options);}
 	
+	TileMap (options) {return new TileMap(this.Canvas,this.Context,this.Camera,options);}
+	
 
 	run(game) {
 		this.then = Date.now();
@@ -316,6 +318,7 @@ class Tileset {
         this.cols = options.cols;
         this.rows = options.rows;
 		this.tileSize = options.tileSize;
+		
 		this.Context = Context;
 		this.Camera = Camera;
 		this.x = 0;
@@ -376,70 +379,63 @@ class Tileset {
 
 }
 
-Kumiho.TileMap = {
+class TileMap {
 
-    Init: function(options) {
+    constructor(Canvas,Context,Camera,options) {
 
-        Kumiho.TileMap.cols = options.cols;
-        Kumiho.TileMap.rows = options.rows;
-        Kumiho.TileMap.tiles = options.tiles;
-        Kumiho.TileMap.Collction = Kumiho.SpriteCollaction();
-        Kumiho.TileMap.sheetcols = options.sheetcols;
-        Kumiho.TileMap.sheetrows = options.sheetrows;
+        this.cols = options.map.cols;
+        this.rows = options.map.rows;
+        this.tiles = options.map.tiles;
+		this.Canvas	= Canvas;
+		this.Context = Context
+		this.Camera = Camera
+        this.Collaction = new SpriteCollaction();
+		this.tileset = options.tileset;
 
+        this.Camera.MaxW = this.cols * this.tileset.tileSize;
+        this.Camera.MaxH = this.rows * this.tileset.tileSize;
 
-        Kumiho.Camera.MaxW = Kumiho.TileMap.cols * Kumiho.TileMap.tsize;
-        Kumiho.Camera.MaxH = Kumiho.TileMap.rows * Kumiho.TileMap.tsize;
-
-        for (var c = 0; c < Kumiho.TileMap.cols; c++) {
-            for (var r = 0; r < Kumiho.TileMap.rows; r++) {
-                var tile = Kumiho.TileMap.GetTile(c, r);
+        for (var c = 0; c < this.cols; c++) {
+            for (var r = 0; r < this.rows; r++) {
+                var tile = this.GetTile(c, r);
                 if (tile !== 0) {
 
-                    Kumiho.TileMap.Collction.Add(
+                    this.Collaction.add(
 
-
-                        Kumiho.Sprite({
-
-                            X: c * Kumiho.TileMap.tsize,
-                            Y: r * Kumiho.TileMap.tsize,
-                            Speed: 200,
-                            width: Kumiho.TileMap.tsize,
-                            height: Kumiho.TileMap.tsize,
-                            image: Kumiho.TileMap.image,
-                            cols: Kumiho.TileMap.sheetcols,
-                            rows: Kumiho.TileMap.sheetrows,
-                            tileIndex: tile
-                        })
-
-                    );
+						new Sprite(this.Canvas,this.Context,this.Camera,{
+							X: c * this.tileset.tileSize, 
+							Y: r * this.tileset.tileSize, 
+							Speed:100,
+							tileset: this.tileset,
+							tileIndex: tile})
+						);
 
                 }
             }
         }
 
 
-    },
+    }
 
-    GetTile: function(col, row) {
-        return Kumiho.TileMap.tiles[row * Kumiho.TileMap.cols + col];
-    },
+    GetTile (col, row) {
+        return this.tiles[row * this.cols + col];
+    }
 
-    SetTile: function(col, row, value) {
-        Kumiho.TileMap.tiles[row * Kumiho.TileMap.cols + col] = value;
-    },
+    SetTile (col, row, value) {
+        this.tiles[row * this.cols + col] = value;
+    }
 
-    Remove: function(col, row) {
+    Remove (col, row) {
 
-        Kumiho.TileMap.tiles.SetTile(col, row, 0);
+        this.SetTile(col, row, 0);
         //Kumiho.TileMap.Collction.Remove();
 
-    },
+    }
 
-    Draw: function() {
+    Draw () {
 
 
-        Kumiho.TileMap.Collction.Draw();
+        this.Collaction.draw();
 
 
     }
