@@ -441,3 +441,78 @@ class TileMap {
     }
 
 };
+
+
+    AnimatedSprite: function(options) {
+        var that = {};
+
+        that.Speed = options.Speed;
+        that.X = options.X;
+        that.Y = options.Y;
+
+        that.Animations = [];
+        that.CurrentAnimation = 0;
+
+        that.AddAnimation = function(Animation) {
+            that.Animations.push(Animation);
+        };
+
+        that.length = function() {
+            return that.Animations.length;
+        };
+
+
+        that.update = function() {
+
+            that.Animations[that.CurrentAnimation].update();
+
+        };
+
+
+        that.Draw = function() {
+            that.Animations[that.CurrentAnimation].render(that.X, that.Y);
+        };
+
+        return that;
+    },
+
+
+    Animatiton: function(options) {
+
+        var that = {},
+            frameIndex = 0,
+            currentposition = 0,
+            LastFrame = false;
+
+        that.numberOfFrames = options.numberOfFrames || 1;
+        that.width = options.width;
+        that.height = options.height;
+        that.image = options.image;
+        that.Loop = options.Loop;
+        that.Index = options.Index;
+        that.ticksPerSec = options.ticksPerSec;
+
+        that.update = function() {
+            currentposition += Kumiho.delta;
+            if (currentposition > (that.numberOfFrames / that.ticksPerSec)) { currentposition = currentposition - (that.numberOfFrames / that.ticksPerSec) }
+        };
+
+        that.render = function(x, y) {
+
+            frameIndex = Math.floor(currentposition * that.ticksPerSec);
+
+            Kumiho.GameObject.Context.drawImage(
+                that.image,
+                frameIndex * that.width,
+                that.Index * that.height,
+                that.width,
+                that.height,
+                x,
+                y,
+                that.width,
+                that.height);
+        };
+
+        return that;
+    },
+
