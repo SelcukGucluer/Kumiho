@@ -86,6 +86,8 @@ class Kumiho{
 	
 	Sprite (options) {return new Sprite(this.Canvas,this.Context,this.Camera,options);}
 	
+	AnimatedSprite (options) {return new AnimatedSprite(this.Canvas,this.Context,this.Camera,options);}
+	
 	TileMap (options) {return new TileMap(this.Canvas,this.Context,this.Camera,options);}
 	
 	Animation (options) {return new Animation(this.Canvas,this.Context,this.Camera,options);}
@@ -445,38 +447,37 @@ class TileMap {
 };
 
 
-  /*  AnimatedSprite: function(options) {
-        var that = {};
-
-        that.Speed = options.Speed;
-        that.X = options.X;
-        that.Y = options.Y;
-
-        that.Animations = [];
-        that.CurrentAnimation = 0;
-
-        that.AddAnimation = function(Animation) {
-            that.Animations.push(Animation);
-        };
-
-        that.length = function() {
-            return that.Animations.length;
-        };
+ class AnimatedSprite extends GameObject {
+	 
+    constructor(Canvas,Context,Camera,options) {
+		super(Context,Camera, options);
+		this.Animations = [];
+        this.CurrentAnimation = 0;
+		
+	}
 
 
-        that.update = function() {
+    AddAnimation (Animation) {
+        this.Animations.push(Animation);
+    };
 
-            that.Animations[that.CurrentAnimation].update();
+    length() {
+        return this.Animations.length;
+    };
 
-        };
+
+    update(delta) {
+
+		this.Animations[this.CurrentAnimation].update(delta);
+
+    };
 
 
-        that.Draw = function() {
-            that.Animations[that.CurrentAnimation].render(that.X, that.Y);
-        };
+    draw() {
+        this.Animations[this.CurrentAnimation].render(this.x, this.y);
+    };
 
-        return that;
-    }*/
+}
 
 
 class Animation {
