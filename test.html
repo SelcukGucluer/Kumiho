@@ -23,11 +23,11 @@ var mygame = {
 		k.Camera.MaxH =1000;
 		
 		var ts = new Image();
-		ts.src = "assets/tileset.png"
+		ts.src = "assets/jiangshi.png"
 		
 		$Scope.mytext = k.Text({X:100, Y:100, width:25, height:25, message:"asdasdasdasasd" })
-		$Scope.ts =  k.Tileset({cols:5,rows:4,tileSize:130,image:ts});
-		$Scope.tm = k.TileMap({map:{cols:5,rows:5,tiles:[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]},tileset:$Scope.ts});
+		$Scope.ts =  k.Tileset({cols:12,rows:8,tileSize:48,image:ts});
+		$Scope.tm = k.TileMap({map:{cols:5,rows:5,tiles:[15,16,17,18,19,20,21,22,23,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]},tileset:$Scope.ts});
 		$Scope.Sprites = new SpriteCollaction()
 		
 		$Scope.my = k.Sprite({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), Speed:Kumiho.random(40,100),tileset:$Scope.ts,tileIndex:5})

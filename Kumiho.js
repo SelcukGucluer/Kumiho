@@ -88,7 +88,9 @@ class Kumiho{
 	
 	TileMap (options) {return new TileMap(this.Canvas,this.Context,this.Camera,options);}
 	
-
+	Animation (options) {return new Animation(this.Canvas,this.Context,this.Camera,options);}
+	
+	
 	run(game) {
 		this.then = Date.now();
 		this.game = game;
@@ -443,7 +445,7 @@ class TileMap {
 };
 
 
-    AnimatedSprite: function(options) {
+  /*  AnimatedSprite: function(options) {
         var that = {};
 
         that.Speed = options.Speed;
@@ -474,45 +476,37 @@ class TileMap {
         };
 
         return that;
-    },
+    }*/
 
 
-    Animatiton: function(options) {
+class Animation {
 
-        var that = {},
-            frameIndex = 0,
-            currentposition = 0,
-            LastFrame = false;
+	constructor(Canvas,Context,Camera,options) {
+		this.numberOfFrames = options.numberOfFrames || 1;
+		this.tileset = options.tileset;
+		this.indexArray = options.indexArray;
+        this.ticksPerSec = options.ticksPerSec;
+		this.frameIndex = 0;
+        this.currentposition = 0;
+        this.LastFrame = false;
+		this.Loop = options.Loop;
+		this.Camera = Camera;
+	}
+	
 
-        that.numberOfFrames = options.numberOfFrames || 1;
-        that.width = options.width;
-        that.height = options.height;
-        that.image = options.image;
-        that.Loop = options.Loop;
-        that.Index = options.Index;
-        that.ticksPerSec = options.ticksPerSec;
+    update (delta) {
+        this.currentposition += delta;
+        if (this.currentposition > (this.numberOfFrames / this.ticksPerSec)) { this.currentposition = this.currentposition - (this.numberOfFrames / this.ticksPerSec) }
+    };
 
-        that.update = function() {
-            currentposition += Kumiho.delta;
-            if (currentposition > (that.numberOfFrames / that.ticksPerSec)) { currentposition = currentposition - (that.numberOfFrames / that.ticksPerSec) }
-        };
+    draw (x, y) {
 
-        that.render = function(x, y) {
+        this.frameIndex = Math.floor(this.currentposition * this.ticksPerSec);
 
-            frameIndex = Math.floor(currentposition * that.ticksPerSec);
+		this.tileset.x = x - this.Camera.X;
+		this.tileset.y = y - this.Camera.Y;
+		this.tileset.draw(this.indexArray[this.frameIndex]);
+    }
 
-            Kumiho.GameObject.Context.drawImage(
-                that.image,
-                frameIndex * that.width,
-                that.Index * that.height,
-                that.width,
-                that.height,
-                x,
-                y,
-                that.width,
-                that.height);
-        };
-
-        return that;
-    },
+}
 
