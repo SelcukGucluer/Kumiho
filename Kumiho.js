@@ -30,67 +30,20 @@ window.countFPS = (function () {
 class Kumiho{
 	constructor(CanvasID) {
 		this.Canvas = document.getElementById(CanvasID);
-		this.$global = {};
-		
-		this.input = {
-
-			keyPressed : [],
-			
-			MouseX : 0,
-			MouseY : 0,
-			
-			MouseClick : false,
-			
-			keydown: function(e) {
-				this.input.keyPressed[e.keyCode] = true;
-			},
-
-			keyup: function(e) {
-				this.input.keyPressed[e.keyCode] = false;
-			},
-
-			mousedown: function(e) {
-				this.input.MouseClick = true;
-				this.input.MouseX = e.clientX;
-				this.input.MouseY = e.clientY;
-			},
-
-			mouseup: function(e) {
-				this.input.MouseClick = false;
-				this.input.MouseX = 0;
-				this.input.MouseY = 0;
-			},
-
-		};
-		
-
 		this.Context = this.Canvas.getContext("2d");
 		this.Camera = new Camera(this.Canvas.width,this.Canvas.height);	
-		this.counter = 0;
-		
-		thisAddEventListener(document, "keydown", this.input.keydown, this);
-		thisAddEventListener(document, "keyup", this.input.keyup, this);
-		thisAddEventListener(this.Canvas, "mousedown", this.input.mousedown, this);
-		thisAddEventListener(this.Canvas, "mouseup", this.input.mouseup, this);
-
-
+		this.$global = {};
 	}
 	
 	Text (options) {return new Text(this.Context,this.Camera,options);}
-	
 	Regtengel (options) {return new Regtengel(this.Context,this.Camera,options);}
-	
 	Scene (Image) {return new Scene(this.Canvas,this.Context,this.Camera,Image);}
-	
-	Tileset (options) {return new Tileset(this.Canvas,this.Context,this.Camera,options);}
-	
-	Sprite (options) {return new Sprite(this.Canvas,this.Context,this.Camera,options);}
-	
-	AnimatedSprite (options) {return new AnimatedSprite(this.Canvas,this.Context,this.Camera,options);}
-	
-	TileMap (options) {return new TileMap(this.Canvas,this.Context,this.Camera,options);}
-	
+	Tileset (options) {return new Tileset(this.Context,this.Camera,options);}
+	Sprite (options) {return new Sprite(this.Context,this.Camera,options);}
+	AnimatedSprite (options) {return new AnimatedSprite(this.Context,this.Camera,options);}
+	TileMap (options) {return new TileMap(this.Context,this.Camera,options);}
 	Animation (options) {return new Animation(this.Canvas,this.Context,this.Camera,options);}
+	Input () {return new Input(this.Canvas);}
 	
 	
 	run(game) {
@@ -114,7 +67,6 @@ class Kumiho{
         this.then = this.now;
     }
 	
-
 	
 	static random(a, b) { 
 		return Math.floor(Math.random() * b) + a;
@@ -170,6 +122,7 @@ class GameObject {
         this.speed = options.Speed;
         this.x = options.X;
         this.y = options.Y;
+		this.r = options.r;
 
 	}
 
@@ -185,6 +138,23 @@ class Regtengel extends GameObject {
 	draw() {
         this.Context.fillStyle = this.Color;
         this.Context.fillRect(this.x - this.Camera.X, this.y - this.Camera.Y, this.w, this.h);
+    }
+}
+
+
+class Circle extends GameObject {
+	constructor(Context,Camera,options) {
+		super(Context,Camera, options);
+		this.Color =  options.Color || "#E88813" ;
+	}
+
+	draw() {
+        this.Context.beginPath();
+		this.Context.lineWidth = 1;
+		this.Context.arc(this.x ,this.y,this.r,0, 2*Math.PI);
+		this.Context.fillStyle = 'yellow';
+		this.Context.fill();
+		this.Context.stroke();
     }
 }
 
@@ -207,12 +177,12 @@ class Text extends GameObject {
 
 class Sprite extends GameObject {
 	 
-	constructor(Canvas,Context,Camera,options) {
+	constructor(Context,Camera,options) {
 		super(Context,Camera, options);
         this.tileset = options.tileset;
 		this.tileIndex = options.tileIndex;
-		this.tileset.x = this.x
-		this.tileset.y = this.y
+		this.tileset.x = this.x;
+		this.tileset.y = this.y;
 	}
 		
 
@@ -312,12 +282,66 @@ class SpriteCollaction {
         if (x1 + w1 > x2 && x2 + w2 > x1 && y1 + h1 > y2 && y2 + h2 > y1) { return true; }
         return false;
     }
+	
+	circleCircle(c1x, c1y, c1r, c2x, c2y, c2r) {
+
+		// get distance between the circle's centers
+		// use the Pythagorean Theorem to compute the distance
+		distX = c1x - c2x;
+		distY = c1y - c2y;
+		distance = Math.sqrt( (distX*distX) + (distY*distY) );
+
+		// if the distance is less than the sum of the circle's
+		// radii, the circles are touching!
+		if (distance <= c1r+c2r) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	rectRect(r1x, r1y, r1w, r1h, r2x, r2y, r2w, r2h) {
+
+		// are the sides of one rectangle touching the other?
+
+		if (r1x + r1w >= r2x &&    // r1 right edge past r2 left
+			r1x <= r2x + r2w &&    // r1 left edge past r2 right
+			r1y + r1h >= r2y &&    // r1 top edge past r2 bottom
+			r1y <= r2y + r2h) {    // r1 bottom edge past r2 top
+			return true;
+		}
+		return false;
+	}
+	
+	circleRect(cx, cy, radius, rx, ry, rw, rh) {
+
+		// temporary variables to set edges for testing
+		testX = cx;
+		testY = cy;
+
+		// which edge is closest?
+		if (cx < rx)         testX = rx;      // test left edge
+		else if (cx > rx+rw) testX = rx+rw;   // right edge
+		if (cy < ry)         testY = ry;      // top edge
+		else if (cy > ry+rh) testY = ry+rh;   // bottom edge
+
+		// get distance from closest edges
+		distX = cx-testX;
+		distY = cy-testY;
+		distance = sqrt( (distX*distX) + (distY*distY) );
+
+		// if the distance is less than the radius, collision!
+		if (distance <= radius) {
+			return true;
+		}
+		return false;
+	}
 
 }
 
 class Tileset {
 
-	constructor(Canvas,Context,Camera,options) {
+	constructor(Context,Camera,options) {
 		this.image = options.image;
         this.cols = options.cols;
         this.rows = options.rows;
@@ -385,12 +409,11 @@ class Tileset {
 
 class TileMap {
 
-    constructor(Canvas,Context,Camera,options) {
+    constructor(Context,Camera,options) {
 
         this.cols = options.map.cols;
         this.rows = options.map.rows;
         this.tiles = options.map.tiles;
-		this.Canvas	= Canvas;
 		this.Context = Context
 		this.Camera = Camera
         this.Collaction = new SpriteCollaction();
@@ -406,7 +429,7 @@ class TileMap {
 
                     this.Collaction.add(
 
-						new Sprite(this.Canvas,this.Context,this.Camera,{
+						new Sprite(this.Context,this.Camera,{
 							X: c * this.tileset.tileSize, 
 							Y: r * this.tileset.tileSize, 
 							Speed:100,
@@ -449,7 +472,7 @@ class TileMap {
 
  class AnimatedSprite extends GameObject {
 	 
-    constructor(Canvas,Context,Camera,options) {
+    constructor(Context,Camera,options) {
 		super(Context,Camera, options);
 		this.Animations = [];
         this.CurrentAnimation = 0;
@@ -511,3 +534,38 @@ class Animation {
 
 }
 
+class Input{
+	constructor(Canvas){
+		this.keyPressed = [];
+		this.MouseX = 0;
+		this.MouseY = 0;
+		this.MouseClick = false;
+		this.Canvas = Canvas;
+					
+		thisAddEventListener(document, "keydown", this.keydown, this);
+		thisAddEventListener(document, "keyup", this.keyup, this);
+		thisAddEventListener(this.Canvas, "mousedown", this.mousedown, this);
+		thisAddEventListener(this.Canvas, "mouseup", this.mouseup, this);
+	}
+				
+	keydown (e) {
+		this.keyPressed[e.keyCode] = true;
+	}
+
+	keyup (e) {
+		this.keyPressed[e.keyCode] = false;
+	}
+
+	mousedown (e) {
+		this.MouseClick = true;
+		this.MouseX = e.clientX;
+		this.MouseY = e.clientY;
+	}
+
+	mouseup (e) {
+		this.MouseClick = false;
+		this.MouseX = 0;
+		this.MouseY = 0;
+	}		
+		
+}
