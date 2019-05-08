@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Untitled Document</title>
+		<script src="Kumiho.js"></script>
+	</head>
+
+	<body >
+
+		<canvas id="myCanvas" width="700" height="500" > </canvas>
+
+		<script>
+		
+
+var k = new Kumiho("myCanvas");
+
+var mygame = {
+
+	init: function($Scope){
+
+
+		
+		var ts = new Image();
+		ts.src = "assets/jiangshi.png"
+		
+		$Scope.leftScore = k.Text({X:100, Y:50, width:25, height:25, message:"asdasdasdasasd" })
+		$Scope.rightScore = k.Text({X:570, Y:50, width:25, height:25, message:"asdasdasdasasd" })
+		$Scope.framerate = k.Text({X:660, Y:480, width:10, height:10, message:"asdasdasdasasd" })
+		
+		$Scope.rightRacket =k.Regtengel({X:685, Y:0, width:15, height:70, Speed:Kumiho.random(40,100) })
+		$Scope.leftRacket =k.Regtengel({X:0, Y:0, width:15, height:70, Speed:Kumiho.random(40,100) })
+		
+		$Scope.boll =k.Circle({X:300, Y:300, r:20, Speed:70 })
+		
+		$Scope.input = k.Input();
+		
+
+	
+	},
+
+	update: function($Scope){
+	
+		$Scope.leftScore.message = 0;
+		$Scope.rightScore.message = 0;
+		$Scope.framerate.message = countFPS();
+		$Scope.framerate.font = "20px Arial";
+		
+		if($Scope.input.keyPressed[87])
+		{
+			$Scope.leftRacket.y =  $Scope.leftRacket.y -5
+		}
+		if($Scope.input.keyPressed[38])
+		{
+			$Scope.rightRacket.y =  $Scope.rightRacket.y -5
+		}
+		if($Scope.input.keyPressed[83])
+		{
+			$Scope.leftRacket.y =  $Scope.leftRacket.y +5
+		}
+		if($Scope.input.keyPressed[40])
+		{
+			$Scope.rightRacket.y =  $Scope.rightRacket.y +5
+		}
+		
+
+	},
+
+	draw: function($Scope){
+		$Scope.rightRacket.draw();
+		$Scope.leftRacket.draw();
+		$Scope.framerate.draw();
+		$Scope.leftScore.draw();
+		$Scope.rightScore.draw();
+		$Scope.boll.draw();
+	}
+
+}
+
+k.run(mygame);
+
+
+</script>
+
+</body>
+</html>
+				
