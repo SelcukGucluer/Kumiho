@@ -31,7 +31,8 @@ class Kumiho{
 	constructor(CanvasID) {
 		this.Canvas = document.getElementById(CanvasID);
 		this.Context = this.Canvas.getContext("2d");
-		this.Camera = new Camera(this.Canvas.width,this.Canvas.height);	
+		this.Camera = new Camera(this.Canvas.width,this.Canvas.height);
+		this.input = new Input(this.Canvas);
 		this.$global = {};
 	}
 	
@@ -44,7 +45,6 @@ class Kumiho{
 	AnimatedSprite (options) {return new AnimatedSprite(this.Context,this.Camera,options);}
 	TileMap (options) {return new TileMap(this.Context,this.Camera,options);}
 	Animation (options) {return new Animation(this.Canvas,this.Context,this.Camera,options);}
-	Input () {return new Input(this.Canvas);}
 	
 	
 	run(game) {
@@ -207,7 +207,6 @@ class Scene  {
         this.h = this.Image.height;
 		this.speed =  50;
 
-	
 	}	
 
     draw () {

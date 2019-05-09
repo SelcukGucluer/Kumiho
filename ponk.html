@@ -31,12 +31,12 @@ var mygame = {
 		$Scope.rightRacket =k.Regtengel({X:685, Y:0, width:15, height:70, Speed:Kumiho.random(40,100) })
 		$Scope.leftRacket =k.Regtengel({X:0, Y:0, width:15, height:70, Speed:Kumiho.random(40,100) })
 		
-		$Scope.boll =k.Circle({X:300, Y:300, r:20, Speed:70 })
+		$Scope.boll =k.Circle({X:300, Y:300, r:20, Speed:2 })
 		
-		$Scope.input = k.Input();
+		$Scope.bollspeedx = $Scope.boll.speed;
+		$Scope.bollspeedy = $Scope.boll.speed;
 		
-
-	
+		
 	},
 
 	update: function($Scope){
@@ -46,19 +46,37 @@ var mygame = {
 		$Scope.framerate.message = countFPS();
 		$Scope.framerate.font = "20px Arial";
 		
-		if($Scope.input.keyPressed[87])
+		$Scope.boll.x = $Scope.boll.x + $Scope.bollspeedx;
+		$Scope.boll.y = $Scope.boll.y + $Scope.bollspeedy;
+		
+		
+		if($Scope.boll.y <= 0)
+		{
+			$Scope.bollspeedy = -$Scope.bollspeedy
+		}
+		
+		if($Scope.boll.y >= 500)
+		{
+			$Scope.bollspeedy = - $Scope.bollspeedy
+		}
+		
+
+
+			
+		
+		if(k.input.keyPressed[k.input.key.w])
 		{
 			$Scope.leftRacket.y =  $Scope.leftRacket.y -5
 		}
-		if($Scope.input.keyPressed[38])
+		if(k.input.keyPressed[38])
 		{
 			$Scope.rightRacket.y =  $Scope.rightRacket.y -5
 		}
-		if($Scope.input.keyPressed[83])
+		if(k.input.keyPressed[k.input.key.s])
 		{
 			$Scope.leftRacket.y =  $Scope.leftRacket.y +5
 		}
-		if($Scope.input.keyPressed[40])
+		if(k.input.keyPressed[40])
 		{
 			$Scope.rightRacket.y =  $Scope.rightRacket.y +5
 		}
