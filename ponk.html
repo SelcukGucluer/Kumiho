@@ -18,11 +18,6 @@ var k = new Kumiho("myCanvas");
 var mygame = {
 
 	init: function($Scope){
-
-
-		
-		var ts = new Image();
-		ts.src = "assets/jiangshi.png"
 		
 		$Scope.leftScore = k.Text({X:100, Y:50, width:25, height:25, message:"asdasdasdasasd" })
 		$Scope.rightScore = k.Text({X:570, Y:50, width:25, height:25, message:"asdasdasdasasd" })
@@ -30,6 +25,10 @@ var mygame = {
 		
 		$Scope.rightRacket =k.Regtengel({X:685, Y:0, width:15, height:70, Speed:Kumiho.random(40,100) })
 		$Scope.leftRacket =k.Regtengel({X:0, Y:0, width:15, height:70, Speed:Kumiho.random(40,100) })
+		
+		$Scope.Rackets = new SpriteCollaction();
+		$Scope.Rackets.add($Scope.rightRacket);
+		$Scope.Rackets.add($Scope.leftRacket);
 		
 		$Scope.boll =k.Circle({X:300, Y:300, r:20, Speed:2 })
 		
@@ -85,8 +84,7 @@ var mygame = {
 	},
 
 	draw: function($Scope){
-		$Scope.rightRacket.draw();
-		$Scope.leftRacket.draw();
+		$Scope.Rackets.draw();
 		$Scope.framerate.draw();
 		$Scope.leftScore.draw();
 		$Scope.rightScore.draw();

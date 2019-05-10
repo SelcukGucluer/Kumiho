@@ -34,7 +34,6 @@ var mygame = {
 		$Scope.walkTopAnimation = k.Animation({numberOfFrames:2, ticksPerSec:3, indexArray:[37,39],tileset:$Scope.ts});
 		$Scope.walkDownAnimation = k.Animation({numberOfFrames:2, ticksPerSec:3, indexArray:[1,3],tileset:$Scope.ts});
 		$Scope.walk = k.AnimatedSprite({X:300,Y:300,Speed:30});
-		$Scope.input = k.Input();
 		$Scope.walk.AddAnimation($Scope.walkRightAnimation);
 		$Scope.walk.AddAnimation($Scope.walkLeftAnimation);
 		$Scope.walk.AddAnimation($Scope.walkTopAnimation);
@@ -54,19 +53,19 @@ var mygame = {
 	
 		$Scope.my.x = $Scope.my.x + k.delta * $Scope.my.speed;
 		
-		if($Scope.input.keyPressed[37])
+		if(k.input.keyPressed[37])
 		{
 			$Scope.walk.CurrentAnimation = 1;
 		}
-		if($Scope.input.keyPressed[38])
+		if(k.input.keyPressed[38])
 		{
 			$Scope.walk.CurrentAnimation = 2;
 		}
-		if($Scope.input.keyPressed[39])
+		if(k.input.keyPressed[39])
 		{
 			$Scope.walk.CurrentAnimation = 0;
 		}
-		if($Scope.input.keyPressed[40])
+		if(k.input.keyPressed[40])
 		{
 			$Scope.walk.CurrentAnimation = 3;
 		}

@@ -75,8 +75,6 @@ class Kumiho{
 		return Math.floor(Math.random() * b) + a;
 	}
 	
-	
-
 }
 
 class Camera {
@@ -285,59 +283,7 @@ class SpriteCollaction {
         return false;
     }
 	
-	circleCircle(c1x, c1y, c1r, c2x, c2y, c2r) {
-
-		// get distance between the circle's centers
-		// use the Pythagorean Theorem to compute the distance
-		distX = c1x - c2x;
-		distY = c1y - c2y;
-		distance = Math.sqrt( (distX*distX) + (distY*distY) );
-
-		// if the distance is less than the sum of the circle's
-		// radii, the circles are touching!
-		if (distance <= c1r+c2r) {
-			return true;
-		}
-		return false;
-	}
 	
-	
-	rectRect(r1x, r1y, r1w, r1h, r2x, r2y, r2w, r2h) {
-
-		// are the sides of one rectangle touching the other?
-
-		if (r1x + r1w >= r2x &&    // r1 right edge past r2 left
-			r1x <= r2x + r2w &&    // r1 left edge past r2 right
-			r1y + r1h >= r2y &&    // r1 top edge past r2 bottom
-			r1y <= r2y + r2h) {    // r1 bottom edge past r2 top
-			return true;
-		}
-		return false;
-	}
-	
-	circleRect(cx, cy, radius, rx, ry, rw, rh) {
-
-		// temporary variables to set edges for testing
-		testX = cx;
-		testY = cy;
-
-		// which edge is closest?
-		if (cx < rx)         testX = rx;      // test left edge
-		else if (cx > rx+rw) testX = rx+rw;   // right edge
-		if (cy < ry)         testY = ry;      // top edge
-		else if (cy > ry+rh) testY = ry+rh;   // bottom edge
-
-		// get distance from closest edges
-		distX = cx-testX;
-		distY = cy-testY;
-		distance = sqrt( (distX*distX) + (distY*distY) );
-
-		// if the distance is less than the radius, collision!
-		if (distance <= radius) {
-			return true;
-		}
-		return false;
-	}
 
 }
 
@@ -391,7 +337,6 @@ class Tileset {
     }
 
     draw (tileIndex) {
-
 		var Cor = this.getCoordinate(tileIndex)
 		this.Context.drawImage(
 		this.image,
@@ -403,7 +348,6 @@ class Tileset {
 		this.y,
 		this.tileSize,
 		this.tileSize);
-
     }
 	
 
@@ -455,24 +399,17 @@ class TileMap {
     }
 
     Remove (col, row) {
-
         this.SetTile(col, row, 0);
         //Kumiho.TileMap.Collction.Remove();
-
     }
 
     Draw () {
-
-
         this.Collaction.draw();
-
-
     }
 
 };
 
-
- class AnimatedSprite extends GameObject {
+class AnimatedSprite extends GameObject {
 	 
     constructor(Context,Camera,options) {
 		super(Context,Camera, options);
@@ -492,9 +429,7 @@ class TileMap {
 
 
     update(delta) {
-
 		this.Animations[this.CurrentAnimation].update(delta);
-
     };
 
 
@@ -503,7 +438,6 @@ class TileMap {
     };
 
 }
-
 
 class Animation {
 
@@ -519,14 +453,12 @@ class Animation {
 		this.Camera = Camera;
 	}
 	
-
     update (delta) {
         this.currentposition += delta;
         if (this.currentposition > (this.numberOfFrames / this.ticksPerSec)) { this.currentposition = this.currentposition - (this.numberOfFrames / this.ticksPerSec) }
     };
 
     draw (x, y) {
-
         this.frameIndex = Math.floor(this.currentposition * this.ticksPerSec);
 
 		this.tileset.x = x - this.Camera.X;
@@ -543,30 +475,7 @@ class Input{
 		this.MouseY = 0;
 		this.MouseClick = false;
 		this.Canvas = Canvas;
-		this.key = { backspace: 8, tab: 9, enter: 13, shiftleft: 16, shiftright: 16, ctrlleft: 17, ctrlrigght: 17, altleft: 18, altright: 18, pause: 19, capslock: 20, escape: 27, pageup: 33, pagedown: 34, end: 35, home: 36, arrowleft: 37, arrowup: 38, arrowright: 39, arrowdown: 40, insert: 45, delete: 46, 0: 48, 1: 49, 2: 50, 3: 51, 4: 52, 5: 53, 6: 54, 7: 55, 8: 56, 9: 57, a: 65, b: 66, c: 67, d: 68, e: 69, f: 70, g: 71, h: 72, i: 73, j: 74, k: 75, l: 76, m: 77, n: 78, o: 79, p: 80, q: 81, r: 82, s: 83, t: 84, u: 85, v: 86, w: 87, x: 88,  y: 89, z: 90, metaleft: 91, metaright: 92, select: 93, numpad0: 96, numpad1: 97,
-    numpad2: 98,
-    numpad3: 99,
-    numpad4: 100,
-    numpad5: 101,
-    numpad6: 102,
-    numpad7: 103,
-    numpad8: 104,
-    numpad9: 105,
-    numpadmultiply: 106,
-    numpadadd: 107,
-    numpadsubtract: 109,
-    numpaddecimal: 110,
-    numpaddivide: 111,
-    f1: 112,
-    f2: 113,
-    f3: 114,
-    f4: 115,
-    f5: 116,
-    f6: 117,
-    f7: 118,
-    f8: 119,
-    f9: 120,
-    f10: 121,
+		this.key = { backspace: 8, tab: 9, enter: 13, shiftleft: 16, shiftright: 16, ctrlleft: 17, ctrlrigght: 17, altleft: 18, altright: 18, pause: 19, capslock: 20, escape: 27, pageup: 33, pagedown: 34, end: 35, home: 36, arrowleft: 37, arrowup: 38, arrowright: 39, arrowdown: 40, insert: 45, delete: 46, 0: 48, 1: 49, 2: 50, 3: 51, 4: 52, 5: 53, 6: 54, 7: 55, 8: 56, 9: 57, a: 65, b: 66, c: 67, d: 68, e: 69, f: 70, g: 71, h: 72, i: 73, j: 74, k: 75, l: 76, m: 77, n: 78, o: 79, p: 80, q: 81, r: 82, s: 83, t: 84, u: 85, v: 86, w: 87, x: 88,  y: 89, z: 90, metaleft: 91, metaright: 92, select: 93, numpad0: 96, numpad1: 97, numpad2: 98, numpad3: 99, numpad4: 100, numpad5: 101, numpad6: 102, numpad7: 103, numpad8: 104, numpad9: 105, numpadmultiply: 106, numpadadd: 107, numpadsubtract: 109, numpaddecimal: 110, numpaddivide: 111, f1: 112, f2: 113, f3: 114, f4: 115, f5: 116, f6: 117, f7: 118, f8: 119, f9: 120, f10: 121,
     f11: 122,
     f12: 123,
     numlock: 144,
@@ -610,4 +519,66 @@ class Input{
 		this.MouseY = 0;
 	}		
 		
+}
+
+class Collision {
+	
+	constructor() {
+		
+	}
+	
+	circleCircle(sprite1, sprite2) {
+
+		// get distance between the circle's centers
+		// use the Pythagorean Theorem to compute the distance
+		distX = sprite1.x - sprite2.x;
+		distY = sprite1.y - sprite2.y;
+		distance = Math.sqrt( (distX*distX) + (distY*distY) );
+
+		// if the distance is less than the sum of the circle's
+		// radii, the circles are touching!
+		if (distance <= sprite1.r+sprite2.r) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	rectRect(sprite1 , sprite2) {
+
+		// are the sides of one rectangle touching the other?
+
+		if (sprite1.x + sprite1.w >= sprite2.x &&    // r1 right edge past r2 left
+			sprite1.x <= sprite2.x + sprite2.w &&    // r1 left edge past r2 right
+			sprite1.y + sprite1.h >= sprite2.y &&    // r1 top edge past r2 bottom
+			sprite1.y <= sprite2.y + sprite2.h) {    // r1 bottom edge past r2 top
+			return true;
+		}
+		return false;
+	}
+	
+	circleRect(sprite1 ,sprite2) {
+
+		// temporary variables to set edges for testing
+		testX = sprite1.x;
+		testY = sprite1.y;
+
+		// which edge is closest?
+		if (sprite1.x < sprite2.x)         testX = sprite2.x;      // test left edge
+		else if (sprite1.x > sprite2.x+sprite2.w) testX = sprite2.x+sprite2.w;   // right edge
+		if (sprite1.y < sprite2.y)         testY = sprite2.y;      // top edge
+		else if (sprite1.y > sprite2.y+sprite2.h) testY = sprite2.y+sprite2.h;   // bottom edge
+
+		// get distance from closest edges
+		distX = sprite1.x-testX;
+		distY = sprite1.y-testY;
+		distance = sqrt( (distX*distX) + (distY*distY) );
+
+		// if the distance is less than the radius, collision!
+		if (distance <= sprite1.r) {
+			return true;
+		}
+		return false;
+	}
+	
 }
