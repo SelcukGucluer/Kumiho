@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Untitled Document</title>
+		<script src="Kumiho.js"></script>
+	</head>
+
+	<body>
+
+		<canvas id="myCanvas" width="500" height="500" > </canvas>
+
+		<script>
+		
+
+	class Student {
+  constructor (student) {
+    this.student = student;
+  }
+  
+  map(f) {
+    var student = Object.assign({}, this.student);
+    return new Student(f(student))
+  }
+  
+  take(item) {
+    var student = Object.assign({}, this.student);
+    student.items.push(item);
+    return new Student(student);
+  }
+  
+   pop() {
+    var student = Object.assign({}, this.student);
+    student.items.pop();
+    return new Student(student);
+  }
+  
+  giveHomework(homeworkQuantity) {
+    var student = Object.assign({}, this.student);
+    student.homeworkQuantity += homeworkQuantity;
+    return new Student(student);
+  }
+  
+  doHomework() {
+	var doneHomework = false;
+    var student = Object.assign({}, this.student);
+    doneHomework = student.items.reduce((done, item) => {
+      if(item === 'pencil') {
+        student.homeworkQuantity -= 1;
+        return true;
+      }
+      return doneHomework;
+    }, false);
+    
+    if(!doneHomework) {
+      console.log('Missing pencil to do homework');
+    }
+	
+	if(doneHomework) {
+      console.log('having pencil to do homework');
+    }
+    
+    return new Student(student);
+  }
+  
+  logMyState() {
+    console.log(this.student);
+    return new Student(this.student);
+  }
+  
+  static newStudent(name) {
+    return new Student({
+      name,
+      items: [],
+      homeworkQuantity: 0,
+    });
+  }
+}
+
+var student = Student.newStudent('Josh');
+
+student
+  .logMyState()
+  .giveHomework(2)
+  .doHomework() // "Missing pencil to do homework"
+  .take('ruler')
+  .take('coffee')
+  .logMyState()
+  .take('pencil')
+  .doHomework()
+  .logMyState()
+  .pop()
+  .doHomework()
+  .logMyState()
+  .map(student => Object.assign({}, student, { homeworkQuantity: 'rebel' }))
+  .logMyState();
+
+
+
+		</script>
+
+	</body>
+</html>
+				
