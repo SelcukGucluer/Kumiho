@@ -92,8 +92,6 @@ class Camera {
 
 	}
 
-
-
     fallow(GameObject) {
 
         var currentX = (GameObject.x - (this.X + (this.width / 2))) + this.X;
@@ -109,8 +107,6 @@ class Camera {
         }
 
     }
-
-
 
 };
 
@@ -403,7 +399,7 @@ class TileMap {
         //Kumiho.TileMap.Collction.Remove();
     }
 
-    Draw () {
+    draw () {
         this.Collaction.draw();
     }
 

@@ -39,12 +39,10 @@ var mygame = {
 		$Scope.walk.AddAnimation($Scope.walkTopAnimation);
 		$Scope.walk.AddAnimation($Scope.walkDownAnimation);
 		
-		//$Scope.tm = k.TileMap({map:{cols:5,rows:5,tiles:[15,16,17,18,19,20,21,22,23,12,24,72,15,15,15,15,15,15,15,15,15,15,15,15,15]},tileset:$Scope.ts});
+		$Scope.tm = k.TileMap({map:{cols:5,rows:5,tiles:[15,16,17,18,19,20,21,22,23,12,24,72,15,15,15,15,15,15,15,15,15,15,15,15,15]},tileset:$Scope.ts});
 		
 		$Scope.my = k.Sprite({X:Kumiho.random(1,500), Y:Kumiho.random(1,500), Speed:Kumiho.random(40,100),tileset:$Scope.ts,tileIndex:5})
 		
-
-	
 	},
 
 	update: function($Scope){
@@ -79,9 +77,8 @@ var mygame = {
 	draw: function($Scope){
 
 		$Scope.mytext.draw();
-		//$Scope.my.draw();
-		//$Scope.tm.Draw();
 		$Scope.walk.draw();
+		$Scope.tm.draw();
 	}
 
 }
