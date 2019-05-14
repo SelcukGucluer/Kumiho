@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Untitled Document</title>
+		<script src="Kumiho.js"></script>
+	</head>
+
+	<body>
+
+		<canvas id="myCanvas" width="500" height="500" > </canvas>
+
+		<script>
+		
+
+var k = new Kumiho("myCanvas");
+
+var mygame = {
+
+	init: function($Scope){
+
+		k.Camera.MaxW =1000;
+		k.Camera.MaxH =1000;
+		
+		var ts = new Image();
+		ts.src = "assets/tilesets/hyptosis_tile-art-batch-1.png"
+		
+		$Scope.mytext = k.Text({X:100, Y:100, width:25, height:25, message:"asdasdasdasasd" })
+		$Scope.ts =  k.Tileset({cols:30,rows:30,tileSize:32,image:ts});
+		$Scope.tm = k.TileMap({map:{cols:20,rows:20,tiles:[22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,
+														   22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,
+														   22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,
+														   22,22,22,232,202,202,202,202]},tileset:$Scope.ts});
+	
+		
+	},
+
+	update: function($Scope){
+	
+		$Scope.mytext.message = countFPS();
+		
+
+	},
+
+	draw: function($Scope){
+
+		$Scope.mytext.draw();
+		$Scope.tm.draw();
+	}
+
+}
+
+k.run(mygame);
+
+
+</script>
+
+</body>
+</html>
+				
