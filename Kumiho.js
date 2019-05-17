@@ -274,9 +274,8 @@ class SpriteCollaction {
     }
 
 
-    checkCollision (x1, y1, w1, h1, x2, y2, w2, h2) {
-        if (x1 + w1 > x2 && x2 + w2 > x1 && y1 + h1 > y2 && y2 + h2 > y1) { return true; }
-        return false;
+    Collision () {
+       return newCollision(this.SpriteArray); 
     }
 	
 	
@@ -553,28 +552,79 @@ class Collision {
 		return false;
 	}
 	
-	circleRect(sprite1 ,sprite2) {
+}
 
-		// temporary variables to set edges for testing
-		testX = sprite1.x;
-		testY = sprite1.y;
 
-		// which edge is closest?
-		if (sprite1.x < sprite2.x)         testX = sprite2.x;      // test left edge
-		else if (sprite1.x > sprite2.x+sprite2.w) testX = sprite2.x+sprite2.w;   // right edge
-		if (sprite1.y < sprite2.y)         testY = sprite2.y;      // top edge
-		else if (sprite1.y > sprite2.y+sprite2.h) testY = sprite2.y+sprite2.h;   // bottom edge
+newCollision= function(set) {
+	Collision = {};
+ 
+	Collision.set = set;
+ 
+	Collision.circleRect={
+		check:function(sprite1 ,sprite2){
+		 		// temporary variables to set edges for testing
+			testX = sprite1.x;
+			testY = sprite1.y;
 
-		// get distance from closest edges
-		distX = sprite1.x-testX;
-		distY = sprite1.y-testY;
-		distance = sqrt( (distX*distX) + (distY*distY) );
+			// which edge is closest?
+			if (sprite1.x < sprite2.x)         testX = sprite2.x;      // test left edge
+			else if (sprite1.x > sprite2.x+sprite2.w) testX = sprite2.x+sprite2.w;   // right edge
+			if (sprite1.y < sprite2.y)         testY = sprite2.y;      // top edge
+			else if (sprite1.y > sprite2.y+sprite2.h) testY = sprite2.y+sprite2.h;   // bottom edge
 
-		// if the distance is less than the radius, collision!
-		if (distance <= sprite1.r) {
-			return true;
+			// get distance from closest edges
+			distX = sprite1.x-testX;
+			distY = sprite1.y-testY;
+			distance = Math.sqrt( (distX*distX) + (distY*distY) );
+
+			// if the distance is less than the radius, collision!
+			if (distance <= sprite1.r) {
+				return true;
+			}
+			return false;
+		},
+		each:function(sprite1,f){
+			for (var i = 0; i < Collision.set.length; i++) {
+				let s = Collision.set[i];
+				if(Collision.circleRect.check(sprite1,s)){ f(s);}
+			else{continue}
+			}
 		}
-		return false;
+	};
+	
+	Collision.rectRect={
+		check:function(sprite1 ,sprite2){
+
+			if (sprite1.x + sprite1.w >= sprite2.x &&    // r1 right edge past r2 left
+				sprite1.x <= sprite2.x + sprite2.w &&    // r1 left edge past r2 right
+				sprite1.y + sprite1.h >= sprite2.y &&    // r1 top edge past r2 bottom
+				sprite1.y <= sprite2.y + sprite2.h) {    // r1 bottom edge past r2 top
+				return true;
+			}
+			return false;
+			
+		},
+		each:function(sprite1,f){
+			for (var i = 0; i < Collision.set.length; i++) {
+				let s = Collision.set[i];
+				if(Collision.rectRect.check(sprite1,s)){ f(s);}
+			else{continue}
+			}
+		}
+		
 	}
 	
+	
+	
+	return Collision;
+ 
+
 }
+
+ 
+
+ 
+ 
+ 
+ 
+
