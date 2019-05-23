@@ -129,11 +129,11 @@ class GameObject {
 class Regtengel extends GameObject {
 	constructor(Context,Camera,options) {
 		super(Context,Camera, options);
-		this.Color =  options.Color || "#E88813" ;
+		this.color =  options.color || "#E88813" ;
 	}
 
 	draw() {
-        this.Context.fillStyle = this.Color;
+        this.Context.fillStyle = this.color;
         this.Context.fillRect(this.x - this.Camera.X, this.y - this.Camera.Y, this.w, this.h);
     }
 }
@@ -142,14 +142,14 @@ class Regtengel extends GameObject {
 class Circle extends GameObject {
 	constructor(Context,Camera,options) {
 		super(Context,Camera, options);
-		this.Color =  options.Color || "#E88813" ;
+		this.color =  options.color || "#E88813" ;
 	}
 
 	draw() {
         this.Context.beginPath();
 		this.Context.lineWidth = 1;
 		this.Context.arc(this.x ,this.y,this.r,0, 2*Math.PI);
-		this.Context.fillStyle = 'yellow';
+		this.Context.fillStyle = this.color ;
 		this.Context.fill();
 		this.Context.stroke();
     }
