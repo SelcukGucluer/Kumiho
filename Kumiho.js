@@ -120,6 +120,7 @@ class GameObject {
         this.x = options.X;
         this.y = options.Y;
 		this.r = options.r;
+		this.var = {};
 
 	}
 
