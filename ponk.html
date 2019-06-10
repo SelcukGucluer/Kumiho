@@ -8,7 +8,7 @@
 
 	<body >
 
-		<canvas id="myCanvas" width="700" height="500" > </canvas>
+		<canvas id="myCanvas" width="800" height="500" > </canvas>
 
 		<script>
 		
@@ -19,23 +19,19 @@ var mygame = {
 
 	init: function($Scp){
 		
-		$Scp.leftScore = k.Text({X:100, Y:50, width:25, height:25, message:"asdasdasdasasd" })
-		$Scp.rightScore = k.Text({X:570, Y:50, width:25, height:25, message:"asdasdasdasasd" })
-		$Scp.framerate = k.Text({X:660, Y:480, width:10, height:10, message:"asdasdasdasasd" })
-		$Scp.speed = k.Text({X:660, Y:480, width:10, height:10, message:"" })
+		$Scp.leftScore = k.Text({X:100, Y:50, width:25, height:25, message:0 })
+		$Scp.rightScore = k.Text({X:670, Y:50, width:25, height:25, message:0 })
+		$Scp.framerate = k.Text({X:760, Y:480, width:10, height:10, message:0 })
+		$Scp.speed = k.Text({X:760, Y:480, width:10, height:10, message:"" })
 		
-		$Scp.rightRacket =k.Regtengel({X:690, Y:0, width:8, height:70, Speed:5, color:"#B42A0D" })
-		$Scp.leftRacket =k.Regtengel({X:0, Y:0, width:8, height:70, Speed:5, color:"#B42A0D" })
+		$Scp.rightRacket =k.Regtengel({X:790, Y:0, width:8, height:90, Speed:5, color:"#B42A0D" })
+		$Scp.leftRacket =k.Regtengel({X:0, Y:0, width:8, height:90, Speed:5, color:"#B42A0D" })
 		
 		$Scp.Rackets = new SpriteCollaction();
 		$Scp.Rackets.add($Scp.rightRacket);
 		$Scp.Rackets.add($Scp.leftRacket);
 		
-		$Scp.boll =k.Circle({X:300, Y:300, r:20, Speed:2,color:"#ffffff" })
-		
-		$Scp.bollspeedx = $Scp.boll.speed;
-		$Scp.bollspeedy = $Scp.boll.speed;
-		
+		$Scp.Balls = new SpriteCollaction();
 		
 	},
 
@@ -44,42 +40,54 @@ var mygame = {
 		$Scp.leftScore.message = 0;
 		$Scp.rightScore.message = 0;
 		$Scp.framerate.message = countFPS();
-		$Scp.speed.message = $Scp.bollspeedx;
+
 		
 		$Scp.framerate.font = "20px Arial";
 		
-		$Scp.boll.x = $Scp.boll.x + $Scp.bollspeedx;
-		$Scp.boll.y = $Scp.boll.y + $Scp.bollspeedy;
-		
-		$Scp.speed.x=$Scp.boll.x +20;
-		$Scp.speed.y=$Scp.boll.y +20;
-		
-		if($Scp.boll.y <= 0)
-		{
-			$Scp.bollspeedy = -$Scp.bollspeedy
-		}
-		
-		if($Scp.boll.y >= 500)
-		{
-			$Scp.bollspeedy = - $Scp.bollspeedy
-		}
-		
 
-		$Scp.Rackets.Collision().circleRect.each($Scp.boll,function(s){
 		
-			if($Scp.bollspeedx > 0){$Scp.bollspeedx = $Scp.bollspeedx + 0.5}
-			if($Scp.bollspeedy > 0){$Scp.bollspeedy = $Scp.bollspeedy + 0.5}
-			if($Scp.bollspeedx < 0){$Scp.bollspeedx = $Scp.bollspeedx - 0.5}
-			if($Scp.bollspeedy < 0){$Scp.bollspeedy = $Scp.bollspeedy - 0.5}
+		$Scp.Balls.each(function(sprite){
+		
+			sprite.x = sprite.x + sprite.var.ballspeedx;
+			sprite.y = sprite.y + sprite.var.ballspeedy;
+		
+			$Scp.speed.x= sprite.x + 20;
+			$Scp.speed.y= sprite.y + 20;
+		
+			if(sprite.y <= 0)
+			{
+				sprite.var.ballspeedy = - sprite.var.ballspeedy
+			}
+		
+			if(sprite.y >= 500)
+			{
+				sprite.var.ballspeedy = - sprite.var.ballspeedy
+			}
 			
-			$Scp.leftRacket.speed = $Scp.leftRacket.speed +0.2
-			$Scp.rightRacket.speed = $Scp.rightRacket.speed +0.2
+			$Scp.speed.message = sprite.var.ballspeedx;
 			
-			$Scp.bollspeedx = - $Scp.bollspeedx
-			$Scp.boll.r = $Scp.boll.r - 0.5
+			
+			$Scp.Rackets.Collision().circleRect.each(sprite,function(s){
+		
+				if(sprite.var.ballspeedx > 0){sprite.var.ballspeedx = sprite.var.ballspeedx + 0.3}
+				if(sprite.var.ballspeedy > 0){sprite.var.ballspeedy = sprite.var.ballspeedy + 0.3}
+				if(sprite.var.ballspeedx < 0){sprite.var.ballspeedx = sprite.var.ballspeedx - 0.3}
+				if(sprite.var.ballspeedy < 0){sprite.var.ballspeedy = sprite.var.ballspeedy - 0.3}
+			
+				$Scp.leftRacket.speed = $Scp.leftRacket.speed +0.02
+				$Scp.rightRacket.speed = $Scp.rightRacket.speed +0.02
+			
+				sprite.var.ballspeedx = - sprite.var.ballspeedx
+				sprite.r = sprite.r - 0.5
+		
+			});
+
+
 		
 		});
-			
+		
+
+		
 		
 		if(k.input.keyPressed[k.input.key.w])
 		{
@@ -97,6 +105,15 @@ var mygame = {
 		{
 			$Scp.rightRacket.y =  $Scp.rightRacket.y + $Scp.rightRacket.speed;
 		}
+		if(k.input.MouseClick)
+		{
+			var ball =k.Circle({X:400, Y:300, r:20, Speed:2,color:"#ffffff" })
+			ball.var.ballspeedx = ball.speed;
+			ball.var.ballspeedy = ball.speed;
+			$Scp.Balls.add(ball);
+		    $Scp.leftRacket.speed = 5
+		    $Scp.rightRacket.speed = 5
+		}
 		
 
 	},
@@ -107,7 +124,7 @@ var mygame = {
 		$Scp.leftScore.draw();
 		$Scp.rightScore.draw();
 		$Scp.speed.draw();
-		$Scp.boll.draw();
+		$Scp.Balls.draw();
 	}
 
 }
