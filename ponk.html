@@ -11,7 +11,6 @@
 		<canvas id="myCanvas" width="800" height="500" > </canvas>
 
 		<script>
-		
 
 var k = new Kumiho("myCanvas");
 
@@ -33,18 +32,24 @@ var mygame = {
 		
 		$Scp.Balls = new SpriteCollaction();
 		
+		k.on("click",function(){
+			var ball =k.Circle({X:400, Y:300, r:20, Speed:2,color:"#ffffff" })
+			ball.var.ballspeedx = ball.speed;
+			ball.var.ballspeedy = ball.speed;
+			$Scp.Balls.add(ball);
+		    $Scp.leftRacket.speed = 5
+		    $Scp.rightRacket.speed = 5
+		});
+		
 	},
 
 	update: function($Scp){
 	
-		$Scp.leftScore.message = 0;
+		$Scp.leftScore.message = $Scp.Balls.SpriteArray.length;
 		$Scp.rightScore.message = 0;
 		$Scp.framerate.message = countFPS();
-
 		
 		$Scp.framerate.font = "20px Arial";
-		
-
 		
 		$Scp.Balls.each(function(sprite){
 		
@@ -62,6 +67,16 @@ var mygame = {
 			if(sprite.y >= 500)
 			{
 				sprite.var.ballspeedy = - sprite.var.ballspeedy
+			}
+			
+			if(sprite.x > 800)
+			{
+				$Scp.Balls.remove(sprite)
+			}
+			
+			if(sprite.x < 0)
+			{
+				$Scp.Balls.remove(sprite)
 			}
 			
 			$Scp.speed.message = sprite.var.ballspeedx;
@@ -86,8 +101,6 @@ var mygame = {
 		
 		});
 		
-
-		
 		
 		if(k.input.keyPressed[k.input.key.w])
 		{
@@ -107,12 +120,7 @@ var mygame = {
 		}
 		if(k.input.MouseClick)
 		{
-			var ball =k.Circle({X:400, Y:300, r:20, Speed:2,color:"#ffffff" })
-			ball.var.ballspeedx = ball.speed;
-			ball.var.ballspeedy = ball.speed;
-			$Scp.Balls.add(ball);
-		    $Scp.leftRacket.speed = 5
-		    $Scp.rightRacket.speed = 5
+
 		}
 		
 

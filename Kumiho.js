@@ -70,6 +70,16 @@ class Kumiho{
         this.then = this.now;
     }
 	
+	fn(callback) {
+         callback.call(document, this);
+    };
+	
+	on(name, handler) {
+        this.fn(function() {
+            this.addEventListener(name, handler, false);
+        });
+    };
+	
 	
 	static random(a, b) { 
 		return Math.floor(Math.random() * b) + a;
