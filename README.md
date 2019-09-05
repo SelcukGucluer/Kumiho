@@ -1,5 +1,5 @@
 # Kumiho
-Time base Javascript Canvas 2D game lib
+Time base Javascript Canvas 2D game engine
 
 
 ## Kullanımı 
